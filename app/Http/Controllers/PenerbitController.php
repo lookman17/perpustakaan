@@ -61,8 +61,10 @@ class PenerbitController extends Controller
 
     // Method untuk menampilkan daftar penerbit
     public function index()
-    {
-        $penerbits = Penerbit::all();
-        return view('Penerbit', compact('penerbits'));
-    }
+{
+    // Menggunakan paginate untuk pagination
+    $penerbit = Penerbit::paginate(4);
+    return view('admin.penerbit', compact('penerbit'));
+}
+
 }

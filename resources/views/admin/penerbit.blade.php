@@ -32,39 +32,43 @@
                 </a>
 
                 <div class="table-responsive card bg-light">
-                    <table class="table table-bordered">
-                        <thead class="table table-dark">
-                            <tr>
-                                <th scope="row">No</th>
-                                <th scope="row">Nama Penerbit</th>
-                                <th scope="row">Alamat Penerbit</th>
-                                <th scope="row">No Telp Penerbit</th>
-                                <th scope="row">Email Penerbit</th>
-                                <th scope="row">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($penerbit as $penerbit)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $penerbit->penerbit_nama }}</td>
-                                <td>{{ $penerbit->penerbit_alamat }}</td>
-                                <td>{{ $penerbit->penerbit_notelp }}</td>
-                                <td>{{ $penerbit->penerbit_email }}</td>
-                                <td>
-                                    <a href="{{ route('update_penerbit', ['penerbit_id' => $penerbit->penerbit_id]) }}">
-                                        <button class="btn btn-warning"><i class="fas fa-pencil"></i></button>
-                                    </a>
-                                    <form action="{{ route('penerbit.delete', ['penerbit_id' => $penerbit->penerbit_id]) }}" method="POST"onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini?');" >
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                    <div class="table-responsive card bg-light">
+                        <table class="table table-bordered">
+                            <thead class="table ">
+                                <tr>
+                                    <th scope="row">No</th>
+                                    <th scope="row">Nama Penerbit</th>
+                                    <th scope="row">Alamat Penerbit</th>
+                                    <th scope="row">No Telp Penerbit</th>
+                                    <th scope="row">Email Penerbit</th>
+                                    <th scope="row">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($penerbit as $item)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $item->penerbit_nama }}</td>
+                                    <td>{{ $item->penerbit_alamat }}</td>
+                                    <td>{{ $item->penerbit_notelp }}</td>
+                                    <td>{{ $item->penerbit_email }}</td>
+                                    <td class="d-flex align-items-center gap-2">
+                                        <a href="{{ route('update_penerbit', ['penerbit_id' => $item->penerbit_id]) }}">
+                                            <button class="btn btn-warning"><i class="fas fa-pencil"></i></button>
+                                        </a>
+                                        <form action="{{ route('penerbit.delete', ['penerbit_id' => $item->penerbit_id]) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        {{ $penerbit->links('vendor.pagination.bootstrap-5') }}
+                    </div>
+
                 </div>
             </div>
         </main>

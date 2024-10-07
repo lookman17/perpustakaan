@@ -21,16 +21,16 @@
                     <strong>Berhasil!</strong> {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-            @elseif (session('deleted'))
+                @elseif (session('deleted'))
                 <div class="alert alert-info alert-dismissible fade show" role="alert">
                     <strong>Berhasil!</strong> {{ session('deleted') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-            @endif
+                @endif
                 <a href="{{ route('peminjaman.create') }}" class="btn btn-primary mb-3">Tambah Peminjaman</a>
                 <div class="table-responsive card bg-light">
                     <table class="table table-bordered">
-                        <thead class="table table-dark">
+                        <thead class="table ">
                             <tr>
                                 <th>Nama Pengguna</th>
                                 <th>Tanggal Peminjaman</th>
@@ -71,7 +71,7 @@
                                             Status
                                         </a>
 
-                                        <form action="{{ route('peminjaman.destroy', $peminjaman->peminjaman_id) }}" method="POST" style="display:inline;"onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini?');">
+                                        <form action="{{ route('peminjaman.destroy', $peminjaman->peminjaman_id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus peminjaman ini?');">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-danger"><i class="fas fa-trash"></i></button>

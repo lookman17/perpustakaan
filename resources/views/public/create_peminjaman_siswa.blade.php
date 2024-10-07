@@ -1,15 +1,15 @@
-
+    
 @extends('template.layout')
 
 @section('title', 'Tambah Peminjaman')
 
 @section('header')
-    @include('template.navbar_admin')
+    @include('template.navbar_siswa')
 @endsection
 
 @section('main')
 <div id="layoutSidenav">
-    @include('template.sidebar_admin')
+    @include('template.sidebar_siswa')
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">

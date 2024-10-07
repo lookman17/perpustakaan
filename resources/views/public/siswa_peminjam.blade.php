@@ -1,6 +1,6 @@
 @extends('template.layout')
 
-@section('title', 'Peminjaman - Siswa Perpustakaan')
+@section('title', 'Pengaturan - Siswa Perpustakaan')
 
 @section('header')
     @include('template.navbar_siswa')
@@ -8,45 +8,90 @@
 
 @section('main')
 <div id="layoutSidenav">
-        @include('template.sidebar_siswa')
-        <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
-                        <h1 class="mt-4">Peminjaman Buku</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Halaman Peminjaman Buku</li>
-                        </ol>
-                        <form action="">
-                            <div class="row">
-                                <div class="col-12 col-md-4 form-group">
-                                    <label for="nama" class="form-label">Nama Peminjam *</label>
-                                    <input type="text" name="nama" id="nama" class="form-control">
-                                </div>
-                                <div class="col-12 col-md-4 form-group">
-                                    <label for="tgl_pinjam" class="form-label">Tanggal Pinjam *</label>
-                                    <input type="date" name="tgl_pinjam" id="tgl_pinjam" class="form-control">
-                                </div>
-                            </div>
-                            <div class="row my-3">
-                                <div class="col-12 col-md-4 form-group">
-                                    <label for="tgl_kembali" class="form-label">Tanggal Kembali *</label>
-                                    <input type="date" name="tgl_kembali" id="tgl_kembali" class="form-control">
-                                </div>
-                                <div class="col-12 col-md-4 form-group">
-                                    <label for="buku" class="form-label">Buku 1 *</label>
-                                    <select class="form-control" name="buku" id="buku">
-                                        <option selected>-Pilih Buku-</option>
-                                        <option value="bulan">Bulan - Tere Liye</option>
-                                        <option value="bumi">Bumi - Tere Liye</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row my-3">
-                                <div class="col-12 col-md-4 form-group">
-                                    <button class="btn btn-primary">Buat Peminjaman</button>
-                                    <button class="btn btn-warning">Tambah Buku</button>
-                                </div>
-                            </div>
-                        </form>
+    @include('template.sidebar_siswa')
+    <div id="layoutSidenav_content">
+        <main>
+
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Daftar Peminjaman Siswa</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">Halaman Daftar Peminjaman Siswa</li>
+                </ol>
+                @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Berhasil!</strong> {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @elseif (session('deleted'))
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    <strong>Berhasil!</strong> {{ session('deleted') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
+                <div class="row gap-4">
+                    <div class="col">
+                        <div class="table-responsive card bg-light">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Judul Buku</th>
+                                        <th>Tanggal Pinjam</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($peminjamans as $peminjaman)
+                                    <tr>
+                                        <td>
+                                            @foreach($peminjaman->details as $detail)
+                                                {{ $detail->buku->buku_judul }}<br>
+                                            @endforeach
+                                        </td>
+                                        <td>{{ $peminjaman->peminjaman_tglpinjam }}</td>
+                                        <td class="badge {{ $peminjaman->peminjaman_statuskembali ? 'bg-success' : 'bg-warning' }} text-white">
+                                            {{ $peminjaman->peminjaman_statuskembali ? 'Selesai' : 'Dipinjam' }}
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailModal{{ $peminjaman->peminjaman_id }}">
+                                                Lihat Detail
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Modal untuk detail peminjaman -->
+                                    <div class="modal fade" id="detailModal{{ $peminjaman->peminjaman_id }}" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="detailModalLabel">Detail Peminjaman</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p><strong>Judul Buku:</strong> @foreach($peminjaman->details as $detail)
+                                                        {{ $detail->buku->buku_judul }}
+                                                    @endforeach</p>
+                                                    <p><strong>Tanggal Pinjam:</strong> {{ $peminjaman->peminjaman_tglpinjam }}</p>
+                                                    <p><strong>Tanggal Kembali:</strong> {{ $peminjaman->peminjaman_tglkembali ?? 'Belum Kembali' }}</p>
+                                                    <p><strong>Status:</strong> {{ $peminjaman->peminjaman_statuskembali ? 'Selesai' : 'Dipinjam' }}</p>
+                                                    <p><strong>Catatan:</strong> {{ $peminjaman->peminjaman_note ?? 'Tidak ada catatan' }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center">Tidak ada data peminjaman.</td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    @endsection
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+@endsection

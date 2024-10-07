@@ -33,7 +33,7 @@
 
                 <div class="table-responsive card bg-light">
                     <table class="table table-bordered">
-                        <thead class="table table-dark">
+                        <thead class="table">
                             <tr>
                                 <th>No</th>
                                 <th>Judul Buku</th>
@@ -76,6 +76,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    {{ $bukus->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
         </main>

@@ -37,7 +37,7 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-gear"></i></div>
                     Pengaturan
                 </a>
-                <a class="nav-link" href="{{ route('login') }}">
+                <a class="nav-link" href="{{ route('logout') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-right-from-bracket"></i></div>
                     Logout
                 </a>

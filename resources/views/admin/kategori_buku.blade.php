@@ -32,7 +32,7 @@
                 <a href="{{ route('create_kategori_buku') }}" class="btn btn-primary mb-3">Create Kategori Buku</a>
                 <div class="table-responsive card bg-light">
                     <table class="table table-bordered">
-                        <thead class="table table-dark">
+                        <thead class="table ">
                             <tr>
                                 <th>No</th>
                                 <th>Kategori Buku</th>

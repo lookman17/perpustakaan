@@ -24,7 +24,13 @@ class Buku extends Model
         'buku_thnterbit',
     ];
     // ...
+    public function index()
+    {
+        $bukus = Buku::with(['penulis', 'penerbit', 'kategori', 'rak']) // Mengambil data dengan relasi
+                     ->paginate(10); // Menampilkan 10 data per halaman
 
+        return view('admin.admin_buku', ['level' => 'admin', 'bukus' => $bukus]);
+    }
     public function penulis()
     {
         return $this->belongsTo(Penulis::class, 'buku_penulis_id');

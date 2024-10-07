@@ -27,9 +27,7 @@ class Peminjaman extends Model
     protected static function boot()
     {
         parent::boot();
-
         static::creating(function ($model) {
-            // Generate a unique ID up to 16 characters
             $model->peminjaman_id = strtoupper(substr(bin2hex(random_bytes(8)), 0, 16));
         });
     }
@@ -37,9 +35,10 @@ class Peminjaman extends Model
 
 
     public function details()
-    {
-        return $this->hasMany(PeminjamanDetail::class, 'peminjaman_detail_peminjaman_id', 'peminjaman_id');
-    }
+{
+    return $this->hasMany(PeminjamanDetail::class, 'peminjaman_detail_peminjaman_id', 'peminjaman_id');
+}
+
 
     public function user()
     {

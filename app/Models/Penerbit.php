@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Penerbit extends Model
 {
@@ -17,50 +18,50 @@ class Penerbit extends Model
 
     protected $fillable = [
         'penerbit_id',
-        'penerbit_nama', // Kolom yang ingin diisi secara massal
+        'penerbit_nama',
         'penerbit_alamat',
         'penerbit_notelp',
         'penerbit_email',
     ];
     protected static function createPenerbit ($data)
-{
-    return self::create($data);
-}
+    {
+        return DB::table('penerbit')->insert($data);
+    }
 
     // Metode untuk membaca semua penerbit
     protected static function readPenerbit ()
-{
-    $data = self::all();
+    {
+        $data = DB::table('penerbit')->paginate(4);
 
-    return $data;
-}
+        return $data;
+    }
 public function penerbit() {
     $data = Penerbit::readPenerbit();
 
     return view('Penerbit', ['level' => 'admin'])->with('penerbit', $data);
 }
-protected static function updatePenerbit($id, $data)
+protected static function updatePenerbit ($id, $data)
 {
-    $penerbit = self::find($id);
+    $penerbit = DB::table('penerbit')->where('penerbit_id', $id)->first();
 
     if ($penerbit) {
-        $penerbit->update($data);
-        return $penerbit;
+        DB::table('penerbit')->where('penerbit_id', $id)->update($data);
+        return $data;
     }
 
-    return null; // atau throw exception jika perlu
+    return null;
 }
 
 
     // Metode untuk membaca penerbit berdasarkan ID
     protected static function readPenerbitById ($id)
     {
-        $penerbit = self::find($id);
+        $penerbit = DB::table('penerbit')->where('penerbit_id', $id)->first();
 
         return $penerbit;
     }
     protected static function deletePenerbit ($id)
-{
-    return self::destroy($id);
-}
+    {
+        return DB::table('penerbit')->where('penerbit_id', $id)->delete();
+    }
 }

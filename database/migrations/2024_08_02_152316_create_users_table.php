@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('user_username', 50)->nullable(false);
             $table->string('user_email', 50)->nullable(false);
             $table->char('user_notelp', 13)->nullable(false);
-            $table->string('user_password', 50)->nullable(false);
-            $table->enum('user_level', ['admin', 'anggota'])->nulllable(false);
+            $table->string('user_password')->nullable(false);
+            $table->enum('user_level', ['admin', 'anggota'])->nullable(false)->default('anggota');
         });
     }
 

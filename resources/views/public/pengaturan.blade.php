@@ -46,7 +46,7 @@
                             <tr>
                                 <th>Password</th>
                                 <td><input type="text" placeholder="Masukan Password" class="form-control"></td>
-                            </tr>   
+                            </tr>
                         </table>
                         <div class="row my-3">
                             <div class="col-12 col-md-4">

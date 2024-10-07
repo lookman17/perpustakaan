@@ -31,9 +31,11 @@
 
             <div class="table-responsive card bg-light">
                 <table class="table table-bordered">
-                    <thead class="table table-dark">
+                    <thead class="table ">
                         <tr>
                             <th>Nama Penulis</th>
+                            <th>Tempat Lahir</th>
+                            <th>Tanggal Lahir</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -41,8 +43,13 @@
                         @foreach($penuliss as $p)
                         <tr>
                             <td>{{ $p->penulis_nama_id }}</td>
+                            <td>{{ $p->penulis_tmptlahir }}</td>
+                            <td>{{ $p->penulis_tgllahir}}</td>
                             <td>
-                                <a href="{{ route('edit_penulis', $p->penulis_id) }}" class="btn btn-warning fas fa-pencil">Update</a>
+                                <a href="{{ route('edit_penulis', $p->penulis_id) }}" class="btn btn-warning">
+                                    <i class="fas fa-pencil"></i>
+                                </a>
+
                                 <form action="{{ route('delete_penulis', $p->penulis_id) }}" method="POST" style="display:inline;"onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini?');">
                                     @csrf
                                     @method('DELETE')

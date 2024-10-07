@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -9,27 +8,37 @@ use App\Models\Penerbit;
 use App\Models\KategoriBuku;
 use App\Models\Rak;
 
-
 class BukuController extends Controller
 {
     // Method untuk menampilkan daftar buku
     public function index()
     {
-        $bukus = Buku::all(); // Ambil semua data buku
-        return view('admin.admin_buku', ['level' => 'admin', 'bukus' => $bukus]); // Kirim data ke view
+        // Mengambil data buku beserta relasinya dan menerapkan pagination
+        $bukus = Buku::with(['penulis', 'penerbit', 'kategori', 'rak']) // Mengambil data dengan relasi
+                     ->paginate(10); // Menampilkan 10 data per halaman
+
+        return view('admin.admin_buku', [
+            'level' => 'admin',
+            'bukus' => $bukus
+        ]);
     }
 
+public function siswa()
+    {
+        $bukus = Buku::with('penulis')->paginate(9);
+        return view('public.siswa_buku', compact('bukus'));
+    }
     // Method untuk menampilkan form tambah buku
     public function create()
-{
-    $penulis = Penulis::all(); // Ambil data penulis
-    $penerbit = Penerbit::all(); // Ambil data penerbit
-    $kategori = KategoriBuku::all(); // Ambil data kategori
-    $rak = Rak::all(); // Ambil data rak
+    {
+        // Ambil data penulis, penerbit, kategori, dan rak untuk ditampilkan di form
+        $penulis = Penulis::all();
+        $penerbit = Penerbit::all();
+        $kategori = KategoriBuku::all();
+        $rak = Rak::all();
 
-    return view('admin.create_buku', compact('penulis', 'penerbit', 'kategori', 'rak'));
-}
-
+        return view('admin.create_buku', compact('penulis', 'penerbit', 'kategori', 'rak'));
+    }
 
     // Method untuk menyimpan data buku ke database
     public function store(Request $request)
@@ -45,9 +54,10 @@ class BukuController extends Controller
             'tahun_terbit' => 'required|integer|digits:4',
         ]);
 
-
+        // Menghasilkan ID secara acak untuk buku
         $id = mt_rand(1000000000000000, 9999999999999999);
 
+        // Mengatur data buku untuk disimpan
         $data = [
             'buku_id' => $id,
             'buku_judul' => $request->input('judul_buku'),
@@ -59,6 +69,7 @@ class BukuController extends Controller
             'buku_thnterbit' => $request->input('tahun_terbit'),
         ];
 
+        // Menyimpan data buku ke database
         Buku::create($data);
 
         return redirect()->route('buku')->with('success', 'Buku berhasil ditambahkan!');
@@ -93,11 +104,11 @@ class BukuController extends Controller
             'buku_thnterbit' => $request->input('tahun_terbit'),
         ];
 
+        // Memperbarui data buku
         $buku->update($data);
 
         return redirect()->route('buku')->with('success', 'Buku berhasil diperbarui!');
     }
-
 
     // Method untuk menghapus data buku
     public function delete($buku_id)
@@ -105,17 +116,17 @@ class BukuController extends Controller
         Buku::destroy($buku_id); // Hapus buku berdasarkan ID
         return redirect()->route('buku')->with('deleted', 'Buku berhasil dihapus!');
     }
+
+    // Method untuk menampilkan form edit buku
     public function edit($buku_id)
-{
-    $buku = Buku::findOrFail($buku_id);
-    // Ambil data lain yang diperlukan seperti penulis, penerbit, kategori, dan rak
-    $penulis = Penulis::all();
-    $penerbit = Penerbit::all();
-    $kategori = KategoriBuku::all();
-    $rak = Rak::all();
+    {
+        $buku = Buku::findOrFail($buku_id);
+        // Ambil data lain yang diperlukan seperti penulis, penerbit, kategori, dan rak
+        $penulis = Penulis::all();
+        $penerbit = Penerbit::all();
+        $kategori = KategoriBuku::all();
+        $rak = Rak::all();
 
-    return view('admin.admin_update_buku', compact('buku', 'penulis', 'penerbit', 'kategori', 'rak'));
-}
-
-
+        return view('admin.admin_update_buku', compact('buku', 'penulis', 'penerbit', 'kategori', 'rak'));
+    }
 }

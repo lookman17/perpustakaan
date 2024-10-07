@@ -6,11 +6,38 @@ use Illuminate\Http\Request;
 use App\Models\Peminjaman;
 use App\Models\PeminjamanDetail;
 use App\Models\Buku;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class PeminjamanController extends Controller
 {
+    public function dashboard()
+    {
+        return view('public.dashboard');
+    }
+    public function siswa()
+    {
+        if (auth()->check()) {
+            $user_id = auth()->user()->user_id;
+
+
+            $peminjamans = Peminjaman::with('details.buku')
+                ->where('peminjaman_user_id', $user_id)
+                ->get();
+
+
+            if ($peminjamans->isEmpty()) {
+                return view('public.siswa_peminjam', ['peminjamans' => $peminjamans]);
+            }
+
+            return view('public.siswa_peminjam', compact('peminjamans'));
+        } else {
+            return redirect('/login');
+        }
+    }
+
     public function index()
     {
         $peminjamans = Peminjaman::with(['details', 'user'])->get();
@@ -22,6 +49,12 @@ class PeminjamanController extends Controller
         $bukus = Buku::all();
         $users = User::all();
         return view('admin.create_peminjaman', compact('bukus', 'users'));
+    }
+    public function buat()
+    {
+        $bukus = Buku::all();
+        $users = User::all();
+        return view('public.create_peminjaman_siswa', compact('bukus', 'users'));
     }
 
     public function store(Request $request)
@@ -41,7 +74,7 @@ $peminjaman = Peminjaman::create([
     'peminjaman_id' => $peminjaman_id,
     'peminjaman_user_id' => $request->user_id,
     'peminjaman_tglpinjam' => $request->tanggal_peminjaman,
-    'peminjaman_tglkembali' => $request->tanggal_kembali, // Simpan tanggal kembali
+    'peminjaman_tglkembali' => $request->tanggal_kembali,
     'peminjaman_statuskembali' => false,
     'peminjaman_note' => null,
     'peminjaman_denda' => null,
@@ -59,19 +92,10 @@ $peminjaman = Peminjaman::create([
         return redirect()->route('peminjaman')->with('success', 'Peminjaman berhasil ditambahkan!');
     }
 
-
-
-
-
-
-
-
     private function generatePeminjamanId()
     {
         return strtoupper(substr(bin2hex(random_bytes(8)), 0, 16)); // Menghasilkan ID 16 karakter
     }
-
-
 
     public function status($id)
     {
@@ -81,19 +105,20 @@ $peminjaman = Peminjaman::create([
 
 
     public function update(Request $request, $id)
-{
-    $peminjaman = Peminjaman::findOrFail($id);
-    $peminjaman->peminjaman_statuskembali = 1; // Status sudah kembali
+    {
+        $peminjaman = Peminjaman::findOrFail($id);
+        $peminjaman->peminjaman_statuskembali = 1; // Status sudah kembali
 
-    // Atur tanggal kembali dan denda
-    $peminjaman->peminjaman_tglkembali = now(); // Atur tanggal kembali
-    $peminjaman->peminjaman_denda = 0; // Atur denda jika perlu
+        // Atur tanggal kembali ke tanggal saat ini
+        $peminjaman->peminjaman_tglkembali = now(); // Atur tanggal kembali ke saat ini
+        $peminjaman->peminjaman_denda = 0; // Atur denda jika perlu
 
-    // Simpan perubahan
-    $peminjaman->save();
+        // Simpan perubahan
+        $peminjaman->save();
 
-    return redirect()->route('peminjaman')->with('success', 'Status peminjaman diperbarui menjadi selesai!');
-}
+        return redirect()->route('peminjaman')->with('success', 'Status peminjaman diperbarui menjadi selesai!');
+    }
+
 
 
 
@@ -128,9 +153,33 @@ $peminjaman = Peminjaman::create([
 
     return redirect()->route('peminjaman')->with('success', 'Status peminjaman diperbarui!');
 }
+public function pinjam($buku_id)
+{
+    $user = Auth::user();
 
 
+    $buku = Buku::find($buku_id);
 
+    // Buat peminjaman baru
+    $peminjaman = new Peminjaman();
+    $peminjaman->peminjaman_user_id = $user->user_id; // ID siswa yang meminjam
+    $peminjaman->peminjaman_tglpinjam = now(); // Tanggal pinjam sekarang
+    $peminjaman->peminjaman_tglkembali = now();
+    $peminjaman->peminjaman_statuskembali = '0';
+    $peminjaman->save();
 
+    // Buat detail peminjaman
+    $peminjamanDetail = new PeminjamanDetail();
+    $peminjamanDetail->peminjaman_detail_peminjaman_id = $peminjaman->peminjaman_id;
+    $peminjamanDetail->peminjaman_detail_buku_id = $buku_id;
+    $peminjamanDetail->save();
+
+    // Update status buku menjadi Dipinjam
+
+    $buku->save();
+
+    // Redirect ke halaman siswa dengan pesan sukses
+    return redirect()->route('peminjaman.siswa')->with('success', 'Buku berhasil dipinjam.');
+}
 
 }

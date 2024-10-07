@@ -44,6 +44,16 @@ class PenulisController extends Controller
         return redirect()->route('Penulis')->with('success', 'Data penulis berhasil ditambahkan!');
     }
 
+    // Method untuk menampilkan form edit penulis
+    public function edit($id)
+    {
+        // Ambil data penulis berdasarkan ID
+        $penulis = Penulis::findOrFail($id);
+
+        // Tampilkan form edit
+        return view('admin.update_penulis', compact('penulis')); // Sesuaikan dengan view edit
+    }
+
     // Method untuk memperbarui data penulis
     public function update(Request $request, $id)
     {

@@ -11,6 +11,15 @@ use App\Models\Peminjam;
 
 class PagesController extends Controller
 {
+    public function dashboard() {
+        return view('public.dashboard');
+    }
+    public function login() {
+        return view('login');
+    }
+    public function register() {
+        return view('register');
+    }
     public function loginPage () {
         return view('public.login');
   }
@@ -22,7 +31,7 @@ class PagesController extends Controller
   }
 
   public function dashboardAdmin () {
-    return view('admin.dashboard', ['level' => 'admin']);
+    return view('admin.dashboard');
 }
 public function bukuSiswa(){
     return view('public.siswa_buku');
@@ -71,19 +80,19 @@ public function update_kategori($kategori_id)
 // Menampilkan daftar buku
 public function buku()
 {
-    $bukus = Buku::all(); // Ambil semua data buku
-    return view('admin.admin_buku', ['level' => 'admin', 'bukus' => $bukus]); // Kirim data ke view
+    $bukus = Buku::all();
+    return view('admin.admin_buku', ['level' => 'admin', 'bukus' => $bukus]);
 }
 
 public function create_buku()
 {
-    return view('admin.create_buku'); // Menampilkan formulir untuk menambahkan buku
+    return view('admin.create_buku');
 }
 
 public function update_buku($id)
 {
     $buku = Buku::findOrFail($id); // Temukan buku berdasarkan ID
-    return view('admin.admin_update_buku', compact('buku')); // Tampilkan form untuk mengubah buku
+    return view('admin.admin_update_buku', compact('buku'));
 }
 
 

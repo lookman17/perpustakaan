@@ -33,7 +33,7 @@
 
                 <div class="table-responsive card bg-light">
                     <table class="table table-bordered">
-                        <thead class="table-dark">
+                        <thead class="table ">
                             <tr>
                                 <th>ID Rak</th>
                                 <th>Nama</th>

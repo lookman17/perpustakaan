@@ -20,8 +20,8 @@
                     @csrf
                     @method('PATCH')
                     <div class="form-group">
-                        <label for="penulis_nama">Nama Penulis *</label>
-                        <input type="text" name="penulis_nama" value="{{ $penulis->penulis_nama }}" class="form-control" required>
+                        <label for="penulis_nama_id">Nama Penulis *</label>
+                        <input type="text" name="penulis_nama_id" value="{{ $penulis->penulis_nama_id }}" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="penulis_tmptlahir">Tempat Lahir</label>
@@ -34,6 +34,7 @@
                     <button type="submit" class="btn btn-primary">Update</button>
                     <a href="{{ route('Penulis') }}" class="btn btn-secondary">Kembali</a>
                 </form>
+
             </div>
         </main>
     </div>

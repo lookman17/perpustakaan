@@ -4,89 +4,114 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    // Method untuk menampilkan daftar pengguna
-    public function index()
+    /*public function create()
     {
-        $users = User::all();
-        return view('admin.user', compact('users'));
+        return view('register');
     }
 
-    // Method untuk menampilkan form tambah pengguna
-    public function create()
-    {
-        return view('admin.create_user'); // Pastikan mengarah ke view yang benar
-    }
-
-    // Method untuk menyimpan pengguna baru
     public function store(Request $request)
     {
         // Validasi input
         $request->validate([
             'user_nama' => 'required|string|max:50',
-            'user_email' => 'required|email',
+            'user_alamat' => 'required|string|max:50',
             'user_username' => 'required|string|max:50',
+            'user_email' => 'required|email|max:50',
+            'user_notelp' => 'required|string|max:13',
+            'user_password' => 'required|string|min:6',
             'user_level' => 'required|in:admin,anggota',
         ]);
 
-        // Generate user_id dengan panjang maksimum 16 karakter
-        $user_id = substr(bin2hex(random_bytes(8)), 0, 16); // 16 karakter
-
-        // Simpan data
-        User::create(array_merge($request->all(), ['user_id' => $user_id]));
-
-        // Redirect ke halaman user
-        return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan!');
-    }
-
-
-
-
-    // Method untuk menampilkan form edit pengguna
-    public function edit($id)
-    {
-        $user = User::findOrFail($id);
-        return view('admin.update_user', compact('user'));
-    }
-
-    // Method untuk memperbarui pengguna
-    public function update(Request $request, $user_id)
-    {
-        // Validasi input
-        $request->validate([
-            'user_nama' => 'required|string|max:50',
-            'user_email' => 'required|email',
-            'user_username' => 'required|string|max:50',
-            'user_level' => 'required|in:admin,anggota',
-            'user_password' => 'nullable|string|min:6', // Biarkan password nullable
+        // Buat user baru
+        User::create([
+            'user_id' => uniqid(), // Contoh membuat user_id otomatis
+            'user_nama' => $request->user_nama,
+            'user_alamat' => $request->user_alamat,
+            'user_username' => $request->user_username,
+            'user_email' => $request->user_email,
+            'user_notelp' => $request->user_notelp,
+            'user_password' => $request->user_password, // Tanpa hashing
+            'user_level' => $request->user_level,
         ]);
 
-        $user = User::findOrFail($user_id);
+        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
+    }
+*/
+public function register (Request $request)
+{
+    $id = mt_rand(1000000000000000, 9999999999999999);
 
-        // Ambil data dari request
-        $data = $request->all();
+    $data = [
+        'user_id' => $id,
+        'user_nama' => $request->input('nama'),
+        'user_alamat' => $request->input('alamat'),
+        'user_username' => $request->input('username'),
+        'user_email' => $request->input('email'),
+        'user_notelp' => $request->input('notelp'),
+        'user_password' => bcrypt($request->input('password'))
+    ];
 
-        // Cek jika password diinput
-        if (!empty($data['user_password'])) {
-            $data['user_password'] = bcrypt($data['user_password']); // Hash password
+    $user = User::register($data);
+
+    if ($user) {
+        return redirect()->route('login')->with('success', 'Pendaftaran akun berhasil!');
+    } else {
+        return back()->withInput();
+    }
+}
+public function login(Request $request)
+{
+    $credentials = [
+        'user_username' => $request->input('user_username'),
+        'user_password' => $request->input('user_password')
+    ];
+
+    $user = User::where('user_username', $credentials['user_username'])->first();
+
+    if ($user) {
+        // Cek apakah password cocok
+        if (Hash::check($credentials['user_password'], $user->user_password)) {
+            // Cek apakah user memiliki level
+            if (is_null($user->user_level) || $user->user_level === '') {
+                return back()->withErrors([
+                    'message' => 'Akun ini tidak memiliki level. Silakan hubungi admin.',
+                ]);
+            }
+
+            Auth::login($user);
+
+            // Redirect berdasarkan level user
+            if ($user->user_level === 'anggota') {
+                return redirect()->route('dashboard'); // Rute untuk dashboard siswa
+            } elseif ($user->user_level === 'admin') {
+                return redirect()->route('dashboardAdmin'); // Rute untuk dashboard admin
+            } else {
+                return back()->withErrors([
+                    'message' => 'Level pengguna tidak dikenali.',
+                ]);
+            }
         } else {
-            unset($data['user_password']); // Hapus password jika tidak ada input
+            return back()->withErrors([
+                'message' => 'Username atau password Anda salah.',
+            ]);
         }
-
-        $user->update($data);
-
-        // Redirect ke halaman daftar user
-        return redirect()->route('user.index')->with('success', 'User berhasil diperbarui!');
+    } else {
+        return back()->withErrors([
+            'message' => 'Username atau password Anda salah.',
+        ]);
     }
+}
+public function logout()
+{
+    Auth::logout(); // Logout user yang sedang login
+    return redirect()->route('login')->with('success', 'Anda telah berhasil logout.');
+}
 
 
-
-    // Method untuk menghapus pengguna
-    public function destroy($id)
-    {
-        User::destroy($id);
-        return redirect()->route('user.index')->with('deleted', 'Pengguna berhasil dihapus!');
-    }
 }
