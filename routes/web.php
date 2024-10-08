@@ -61,6 +61,8 @@ Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
         Route::patch('/{buku_id}', [BukuController::class, 'update'])->name('buku.update');
         Route::delete('/{buku_id}', [BukuController::class, 'delete'])->name('buku.delete');
 
+
+
     });
 
     // Modul Penulis
@@ -91,9 +93,10 @@ Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
         Route::get('/', [RakController::class, 'index'])->name('rak.index');
         Route::get('/create', [RakController::class, 'create'])->name('rak.create');
         Route::post('/', [RakController::class, 'store'])->name('rak.store');
-        Route::get('/{rak}/edit', [RakController::class, 'edit'])->name('rak.edit');
-        Route::put('/{rak}', [RakController::class, 'update'])->name('rak.update');
-        Route::delete('/{rak}', [RakController::class, 'destroy'])->name('rak.destroy');
+        Route::get('/{rak_id}/edit', [RakController::class, 'edit'])->name('rak.edit');
+        Route::put('/{rak_id}', [RakController::class, 'update'])->name('rak.update');
+        Route::delete('/{rak_id}', [RakController::class, 'delete'])->name('rak.delete');
+
 
     });
     Route::get('/admin', [PagesController::class, 'dashboardAdmin'])->name('dashboardAdmin');
@@ -106,4 +109,6 @@ Route::middleware(['web', 'auth', 'role:anggota'])->group(function () {
     Route::get('/create/siswa', [PeminjamanController::class, 'buat'])->name('peminjaman.buat');
     Route::get('/siswa', [PeminjamanController::class, 'siswa'])->name('peminjaman.siswa');
     Route::get('/siswa/buku', [BukuController::class, 'siswa'])->name('siswa.buku');
+    Route::get('pengaturan',[PagesController::class, 'Pengaturan'])->name('pengaturan');
+    Route::patch('user/{id}/update_profile', [UserController::class, 'upload_profile'])->name('action.upload_profile');
 });

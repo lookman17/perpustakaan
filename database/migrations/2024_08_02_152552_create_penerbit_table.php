@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('penerbit', function (Blueprint $table) {
-            $table->string('penerbit_id', 16)->primary()->nullable(false);
-            $table->string('penerbit_nama', 50)->nullable(false);
-            $table->string('penerbit_alamat', 50)->nullable(false);
-            $table->char('penerbit_notelp', 13)->nullable(false);
-            $table->string('penerbit_email', 50)->nullable(false);
+            $table->string('penerbit_id')->primary()->nullable(false);
+            $table->string('penerbit_nama')->nullable(false);
+            $table->string('penerbit_alamat')->nullable(false);
+            $table->char('penerbit_notelp')->nullable(false);
+            $table->string('penerbit_email')->nullable(false);
         });
     }
 

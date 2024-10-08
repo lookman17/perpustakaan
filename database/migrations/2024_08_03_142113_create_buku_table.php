@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('buku_judul', 40)->nullable(false);
             $table->char('buku_isbn', 16)->nullable(false);
             $table->char('buku_thnterbit', 4)->nullable(false);
+            $table->string('buku_gambar')->nullable('true');
 
             // Create Foreign Key
             $table->foreign('buku_penulis_id')->references('penulis_id')->on('penulis')

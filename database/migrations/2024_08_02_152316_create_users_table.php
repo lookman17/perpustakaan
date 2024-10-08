@@ -20,8 +20,9 @@ return new class extends Migration
             $table->char('user_notelp', 13)->nullable(false);
             $table->string('user_password')->nullable(false);
             $table->enum('user_level', ['admin', 'anggota'])->nullable(false)->default('anggota');
+            $table->string('user_pict_url')->nullable('true');
         });
-    }
+    }   
 
     /**
      * Reverse the migrations.

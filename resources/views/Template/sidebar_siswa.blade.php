@@ -15,7 +15,7 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-hand"></i></div>
                     Peminjaman
                 </a>
-                <a class="nav-link" href="{{ route('Pengaturan') }}">
+                <a class="nav-link" href="{{ route('pengaturan') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-gear"></i></div>
                     Pengaturan
                 </a>

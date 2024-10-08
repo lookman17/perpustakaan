@@ -17,6 +17,7 @@ class RakController extends Controller
     // Show form for creating a new Rak
     public function create()
     {
+        $raks = Rak::all();
         return view('admin.create_rak');
     }
 
@@ -24,13 +25,17 @@ class RakController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'rak_id' => 'required|string|max:16',
             'rak_nama' => 'required|string|max:20',
             'rak_lokasi' => 'required|string|max:50',
             'rak_kapasitas' => 'required|integer',
         ]);
 
-        Rak::create($validated);
+        // Generate a random ID for rak_id
+        $rak_id = strtoupper(bin2hex(random_bytes(8))); // Generates a random 16-character string
+
+        // Create the Rak instance with the random ID
+        Rak::create(array_merge($validated, ['rak_id' => $rak_id]));
+
         return redirect()->route('rak.index')->with('success', 'Rak berhasil ditambahkan');
     }
 
@@ -41,7 +46,6 @@ class RakController extends Controller
         $raks = Rak::all(); // Ambil semua rak untuk dropdown
         return view('admin.update_rak', compact('rak', 'raks'));
     }
-
 
     // Update an existing Rak in the database
     public function update(Request $request, $rak_id)

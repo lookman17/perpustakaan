@@ -16,13 +16,25 @@
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item active">Halaman Update Data Buku</li>
                 </ol>
-                <form action="{{ route('buku.update', ['buku_id' => $buku->buku_id]) }}" method="POST">
+
+                <!-- Menampilkan Pesan Kesalahan -->
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form action="{{ route('buku.update', ['buku_id' => $buku->buku_id]) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
 
                     <div class="form-group mb-3">
                         <label for="judul_buku" class="form-label">Judul Buku</label>
-                        <input type="text" name="judul_buku" id="judul_buku" class="form-control" value="{{ $buku->buku_judul }}" required>
+                        <input type="text" name="judul_buku" id="judul_buku" class="form-control" value="{{ $buku->buku_judul }}" placeholder="Masukkan Judul Buku" required>
                     </div>
 
                     <div class="form-group mb-3">
@@ -51,7 +63,7 @@
 
                     <div class="form-group mb-3">
                         <label for="tahun_terbit" class="form-label">Tahun Terbit</label>
-                        <input type="number" name="tahun_terbit" id="tahun_terbit" class="form-control" value="{{ $buku->buku_thnterbit }}" required>
+                        <input type="number" name="tahun_terbit" id="tahun_terbit" class="form-control" value="{{ $buku->buku_thnterbit }}" placeholder="Masukkan Tahun Terbit" required>
                     </div>
 
                     <div class="form-group mb-3">
@@ -80,7 +92,17 @@
 
                     <div class="form-group mb-3">
                         <label for="isbn" class="form-label">ISBN</label>
-                        <input type="text" name="isbn" id="isbn" class="form-control" value="{{ $buku->buku_isbn }}" required>
+                        <input type="text" name="isbn" id="isbn" class="form-control" value="{{ $buku->buku_isbn }}" placeholder="Masukkan ISBN Buku" required>
+                    </div>
+
+                    <!-- Input untuk Unggah Gambar Buku -->
+                    <div class="form-group mb-3">
+                        <label for="gambar" class="form-label">Gambar Buku</label>
+                        <input type="file" name="gambar" id="gambar" class="form-control" accept="image/*">
+                        @if($buku->buku_gambar)
+                            <img src="{{ asset('path/to/images/' . $buku->buku_gambar) }}" alt="Gambar Buku" class="mt-2" style="max-width: 150px;">
+                            <small class="form-text text-muted">Gambar saat ini</small>
+                        @endif
                     </div>
 
                     <button type="submit" class="btn btn-success">Update Buku</button>

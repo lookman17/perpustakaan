@@ -35,7 +35,6 @@
                     <table class="table table-bordered">
                         <thead class="table ">
                             <tr>
-                                <th>ID Rak</th>
                                 <th>Nama</th>
                                 <th>Lokasi</th>
                                 <th>Kapasitas</th>
@@ -45,13 +44,12 @@
                         <tbody>
                             @foreach ($raks as $rak)
                                 <tr>
-                                    <td>{{ $rak->rak_id }}</td>
                                     <td>{{ $rak->rak_nama }}</td>
                                     <td>{{ $rak->rak_lokasi }}</td>
                                     <td>{{ $rak->rak_kapasitas }}</td>
                                     <td>
                                         <a href="{{ route('rak.edit', $rak->rak_id) }}" class="btn btn-warning"><i class="fas fa-pencil"></i></a>
-                                        <form action="{{ route('rak.destroy', $rak->rak_id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus rak ini?');">
+                                        <form action="{{ route('rak.delete', $rak->rak_id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus rak ini?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>

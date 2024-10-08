@@ -20,27 +20,28 @@
                     @csrf
                     <div class="form-group col-12 col-md-6 col-lg-4">
                         <label for="nama" class="form-label">Nama Penerbit</label>
-                        <input type="text" name="nama" id="nama" class="form-control" placeholder="Masukkan nama penerbit">
+                        <input type="text" name="nama" id="nama" class="form-control" placeholder="Masukkan nama penerbit" required>
                     </div>
                     <div class="form-group col-12 col-md-6 col-lg-4">
                         <label for="alamat" class="form-label">Alamat Penerbit</label>
-                        <input type="text" name="alamat" id="alamat" class="form-control" placeholder="Masukkan alamat penerbit">
+                        <input type="text" name="alamat" id="alamat" class="form-control" placeholder="Masukkan alamat penerbit" required>
                     </div>
                     <div class="form-group col-12 col-md-6 col-lg-4">
                         <label for="notelp" class="form-label">No Telp Penerbit</label>
-                        <input type="number" name="notelp" id="notelp" class="form-control" placeholder="Masukkan notelp penerbit">
+                        <input type="number" name="notelp" id="notelp" class="form-control" placeholder="Masukkan notelp penerbit" required>
                     </div>
                     <div class="form-group col-12 col-md-6 col-lg-4">
                         <label for="email" class="form-label">Email Penerbit</label>
-                        <input type="email" name="email" id="email" class="form-control" placeholder="Masukkan email penerbit">
+                        <input type="email" name="email" id="email" class="form-control" placeholder="Masukkan email penerbit" required>
                     </div>
                     <div class="form-group col-12 col-md-6 col-lg-4">
                         <button class="btn btn-success" type="submit">Tambahkan</button>
                     </div>
                 </form>
+
             </div>
         </main>
-    
+
     </div>
 </div>
 @endsection

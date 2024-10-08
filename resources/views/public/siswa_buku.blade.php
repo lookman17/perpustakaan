@@ -20,8 +20,14 @@
                     @foreach ($bukus as $buku)
                         <div class="card col-12 col-md-4 col-lg-3">
                             <div class="card-body">
+                                @if($buku->buku_urlgambar && file_exists(storage_path('app/public/buku_pictures/' . basename($buku->buku_urlgambar))))
                                 <img src="{{ asset('storage/buku_pictures/' . basename($buku->buku_urlgambar)) }}"
-                                    alt="{{ $buku->buku_judul }}" class="book-img" />
+                                     alt="{{ $buku->buku_judul }}" class="book-img mb-3" style="max-width: 100%; height: auto;" />
+                            @else
+                                <img src="{{ asset('storage/buku_pictures/default_image.png') }}"
+                                     alt="Gambar tidak tersedia" class="book-img mb-3" style="max-width: 100%; height: auto;" />
+                            @endif
+
                                 <hr />
                                 <p class="text-center fw-bolder fs-4 my-0">
                                     {{ $buku->buku_judul }}
@@ -61,13 +67,12 @@
                                                     </ul>
                                                 </div>
                                                 <div class="mt-3">
-                                                    <span>Keterlambat mengembalikan buku kemungkinan akan dikenakan denda. Apakah anda ingin meminjam buku ini?</span>
+                                                    <span>Keterlambatan mengembalikan buku kemungkinan akan dikenakan denda. Apakah anda ingin meminjam buku ini?</span>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                                                 <a href="{{ route('buku.pinjam', ['buku_id' => $buku['buku_id']]) }}" class="btn btn-primary" type="button">Pinjam</a>
-
                                             </div>
                                         </div>
                                     </div>
@@ -76,5 +81,8 @@
                         </div>
                     @endforeach
                 </div>
-
+            </div>
+        </main>
+    </div>
+</div>
 @endsection

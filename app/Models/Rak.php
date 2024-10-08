@@ -11,7 +11,9 @@ class Rak extends Model
 
     protected $table = 'rak';
     protected $primaryKey = 'rak_id';
-    public $timestamps = false; // No timestamps in the table
+    public $incrementing = false; // Menyatakan bahwa primary key bukan auto-increment
+    protected $keyType = 'string'; // Menyatakan bahwa primary key adalah string
+    public $timestamps = false; // Tidak menggunakan timestamps
 
     protected $fillable = [
         'rak_id',

@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -85,10 +86,11 @@ public function login(Request $request)
             }
 
             Auth::login($user);
-
+            Log::info('User ' . $user->user_nama . ' telah login ke dalam aplikasi');
             // Redirect berdasarkan level user
             if ($user->user_level === 'anggota') {
-                return redirect()->route('dashboard'); // Rute untuk dashboard siswa
+                return redirect()->route('dashboard');
+                 // Rute untuk dashboard siswa
             } elseif ($user->user_level === 'admin') {
                 return redirect()->route('dashboardAdmin'); // Rute untuk dashboard admin
             } else {
@@ -112,6 +114,17 @@ public function logout()
     Auth::logout(); // Logout user yang sedang login
     return redirect()->route('login')->with('success', 'Anda telah berhasil logout.');
 }
+public function upload_profile (Request $request, $id)
+{
+    if ($request->hasFile('profile')) {
+        $data = $request->file('profile');
 
+        User::upload_profile($id, $data);
+
+        return redirect()->route('pengaturan')->with('success', 'Foto profil berhasil diperbarui!');
+    }
+
+    return back()->with('failed', 'Foto profil gagal diperbarui!');
+}
 
 }

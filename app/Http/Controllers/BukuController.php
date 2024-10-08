@@ -52,7 +52,9 @@ public function siswa()
             'rak_id' => 'required|string|exists:rak,rak_id',
             'isbn' => 'required|string|max:16',
             'tahun_terbit' => 'required|integer|digits:4',
+            'gambar_buku' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi gambar
         ]);
+
 
         // Menghasilkan ID secara acak untuk buku
         $id = mt_rand(1000000000000000, 9999999999999999);
@@ -68,6 +70,15 @@ public function siswa()
             'buku_isbn' => $request->input('isbn'),
             'buku_thnterbit' => $request->input('tahun_terbit'),
         ];
+        if ($request->hasFile('gambar_buku')) {
+            // Simpan gambar ke folder 'uploads/buku'
+            $imageName = time() . '.' . $request->gambar_buku->extension();
+            $request->gambar_buku->move(public_path('uploads/buku'), $imageName);
+
+            // Masukkan path gambar ke dalam data buku
+            $data['buku_gambar'] = 'uploads/buku/' . $imageName;
+        }
+
 
         // Menyimpan data buku ke database
         Buku::create($data);

@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable implements AuthenticatableContract
 {
@@ -26,6 +27,21 @@ class User extends Authenticatable implements AuthenticatableContract
         'user_password',
         'user_level',
     ];
+    protected static function upload_profile ($id, $data)
+{
+    $user = self::find($id);
+
+    if ($user->user_pict_url) {
+        Storage::delete($user->user_pict_url);
+    }
+
+    if ($data) {
+        $path = $data->store('public/profile_pictures');
+        $user->user_pict_url = $path;
+    }
+
+    $user->save();
+}
 
     protected static function register ($data)
     {

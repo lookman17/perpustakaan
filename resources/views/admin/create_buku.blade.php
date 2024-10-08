@@ -11,12 +11,13 @@
     @include('template.sidebar_admin')
     <div id="layoutSidenav_content">
         <main>
+
             <div class="container-fluid px-4">
                 <h1 class="mt-4">Tambah Buku</h1>
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item active">Halaman Tambah Buku</li>
                 </ol>
-                <form action="{{ route('action.create_buku') }}" method="POST">
+                <form action="{{ route('action.create_buku') }}" method="POST" enctype="multipart/form-data"> <!-- Tambahkan enctype -->
                     @csrf
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -94,11 +95,12 @@
                         <div class="col-12 col-md-4 form-group">
                             <label for="rak_id" class="form-label">Rak Buku *</label>
                             <select name="rak_id" id="rak_id" class="form-control" required>
-                                <option value="" disabled selected>-Pilih Rak Buku-</option>
+                                <option value="" disabled {{ old('rak_id') ? '' : 'selected' }}>-Pilih Rak Buku-</option>
                                 @foreach($rak as $r)
-                                    <option value="{{ $r->rak_id }}">{{ $r->rak_nama }}</option>
+                                    <option value="{{ $r->rak_id }}" {{ old('rak_id') == $r->rak_id ? 'selected' : '' }}>{{ $r->rak_id }}</option>
                                 @endforeach
                             </select>
+
                             @error('rak_id')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -108,6 +110,14 @@
                             <label for="isbn" class="form-label">Nomor ISBN *</label>
                             <input type="text" name="isbn" id="isbn" class="form-control" placeholder="Masukkan nomor ISBN" required>
                             @error('isbn')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="col-12 col-md-4 form-group">
+                            <label for="gambar_buku" class="form-label">Gambar Buku *</label>
+                            <input type="file" name="gambar_buku" id="gambar_buku" class="form-control" accept="image/*" required>
+                            @error('gambar_buku')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>

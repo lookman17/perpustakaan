@@ -16,10 +16,6 @@
                 <form action="{{ route('rak.store') }}" method="POST">
                     @csrf
                     <div class="form-group">
-                        <label for="rak_id">ID Rak *</label>
-                        <input type="text" name="rak_id" class="form-control" required>
-                    </div>
-                    <div class="form-group">
                         <label for="rak_nama">Nama Rak *</label>
                         <input type="text" name="rak_nama" class="form-control" required>
                     </div>
