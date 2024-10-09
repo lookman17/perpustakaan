@@ -16,7 +16,7 @@ use App\Http\Controllers\{
     RakController
 };
 
-// Halaman Login dan Registrasi (tidak memerlukan auth)
+
 Route::get('/login', [PagesController::class, 'login'])->name('login');
 Route::post('/user/login', [UserController::class, 'login'])->name('user.login');
 Route::get('/register', [PagesController::class, 'register'])->name('register');
@@ -26,12 +26,11 @@ Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
 // Proteksi semua halaman dengan middleware 'auth'
 Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
-    // Halaman Siswa dan Admin
     Route::get('/admin_buku', [PagesController::class, 'adminBuku'])->name('adminBuku');
     Route::get('/admin_peminjam', [PagesController::class, 'adminPeminjam'])->name('adminPeminjam');
     Route::get('/pengaturan', [PagesController::class, 'Pengaturan'])->name('Pengaturan');
     Route::get('/pengaturan_admin', [PagesController::class, 'adminPengaturan'])->name('adminPengaturan');
-        Route::patch('user/{id}/update_profile', [UserController::class, 'upload_profile'])->name('action.upload_profile');
+    Route::patch('user/{id}/update_profile_admin', [UserController::class, 'upload_profile_admin'])->name('action.upload_profile');
 
     // Modul Penerbit
     Route::prefix('penerbit')->group(function () {
@@ -61,8 +60,6 @@ Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
         Route::get('/update/{buku_id}', [BukuController::class, 'edit'])->name('update_buku');
         Route::patch('/{buku_id}', [BukuController::class, 'update'])->name('buku.update');
         Route::delete('/{buku_id}', [BukuController::class, 'delete'])->name('buku.delete');
-
-
 
     });
 

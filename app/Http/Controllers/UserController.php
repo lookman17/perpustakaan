@@ -126,6 +126,18 @@ public function upload_profile (Request $request, $id)
 
     return back()->with('failed', 'Foto profil gagal diperbarui!');
 }
+public function upload_profile_admin (Request $request, $id)
+{
+    if ($request->hasFile('profile')) {
+        $data = $request->file('profile');
+
+        User::upload_profile($id, $data);
+
+        return redirect()->route('pengaturanAdmin')->with('success', 'Foto profil berhasil diperbarui!');
+    }
+
+    return back()->with('failed', 'Foto profil gagal diperbarui!');
+}
 
 
 }

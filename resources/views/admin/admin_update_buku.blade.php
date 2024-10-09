@@ -101,7 +101,6 @@
                         <input type="file" name="buku_gambar" id="buku_gambar" class="form-control" accept="image/*">
                         @if($buku->buku_gambar)
                             <img src="{{ asset('storage/img/buku' . basename($buku->buku_gambar)) }}" alt="Gambar Buku" class="mt-2" style="max-width: 150px;">
-                            <small class="form-text text-muted">Gambar saat ini</small>
                         @endif
                     </div>
 

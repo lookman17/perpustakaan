@@ -12,7 +12,7 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Buku</h1>
+                <h1 class="mt-4">Daftar Buku</h1>
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item active">Halaman Daftar Buku</li>
                 </ol>
@@ -26,7 +26,6 @@
                                          alt="{{ $buku->buku_judul }}" class="book-img mb-3"
                                          style="max-width: 100%; height: auto;" />
                                 @else
-                                    <!-- Gambar default jika gambar buku tidak tersedia -->
                                     <img src="{{ asset('storage/buku_pictures/default_image.png') }}"
                                          alt="Gambar tidak tersedia" class="book-img mb-3"
                                          style="max-width: 100%; height: auto;" />
@@ -86,6 +85,7 @@
                     @endforeach
                 </div>
             </div>
+            {{ $bukus->links('vendor.pagination.bootstrap-5') }}
         </main>
     </div>
 </div>
