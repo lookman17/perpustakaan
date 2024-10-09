@@ -97,7 +97,7 @@
                             <select name="rak_id" id="rak_id" class="form-control" required>
                                 <option value="" disabled {{ old('rak_id') ? '' : 'selected' }}>-Pilih Rak Buku-</option>
                                 @foreach($rak as $r)
-                                    <option value="{{ $r->rak_id }}" {{ old('rak_id') == $r->rak_id ? 'selected' : '' }}>{{ $r->rak_id }}</option>
+                                    <option value="{{ $r->rak_id }}" {{ old('rak_id') == $r->rak_id ? 'selected' : '' }}>{{ $r->rak_nama }}</option>
                                 @endforeach
                             </select>
 
@@ -116,7 +116,8 @@
 
                         <div class="col-12 col-md-4 form-group">
                             <label for="gambar_buku" class="form-label">Gambar Buku *</label>
-                            <input type="file" name="gambar_buku" id="gambar_buku" class="form-control" accept="image/*" required>
+                            <input type="file" name="buku_gambar" id="buku_gambar" class="form-control" accept="image/*" required>
+
                             @error('gambar_buku')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror

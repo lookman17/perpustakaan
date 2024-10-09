@@ -42,8 +42,52 @@ public function siswa()
 
     // Method untuk menyimpan data buku ke database
     public function store(Request $request)
+{
+    // Validasi input
+    $request->validate([
+        'judul_buku' => 'required|string|max:40',
+        'penulis_id' => 'required|string|exists:penulis,penulis_id',
+        'penerbit_id' => 'required|string|exists:penerbit,penerbit_id',
+        'kategori_id' => 'required|string|exists:kategori,kategori_id',
+        'rak_id' => 'required|string|exists:rak,rak_id',
+        'isbn' => 'required|string|max:16',
+        'tahun_terbit' => 'required|integer|digits:4',
+        'buku_gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi gambar
+    ]);
+
+    // Menghasilkan ID secara acak untuk buku
+    $id = mt_rand(1000000000000000, 9999999999999999);
+
+    // Mengatur data buku untuk disimpan
+    $data = [
+        'buku_id' => $id,
+        'buku_judul' => $request->input('judul_buku'),
+        'buku_penulis_id' => $request->input('penulis_id'),
+        'buku_penerbit_id' => $request->input('penerbit_id'),
+        'buku_kategori_id' => $request->input('kategori_id'),
+        'buku_rak_id' => $request->input('rak_id'),
+        'buku_isbn' => $request->input('isbn'),
+        'buku_thnterbit' => $request->input('tahun_terbit'),
+    ];
+
+    // Memastikan buku_gambar ter-upload
+    if ($request->hasFile('buku_gambar')) {
+        // Simpan gambar ke folder 'uploads/buku'
+        $imageName = time() . '.' . $request->buku_gambar->extension();
+        $request->buku_gambar->move(public_path('uploads/buku'), $imageName);
+
+        // Masukkan path gambar ke dalam data buku
+        $data['buku_gambar'] = 'uploads/buku/' . $imageName;
+    }
+
+    // Menyimpan data buku ke database
+    Buku::create($data);
+
+    return redirect()->route('buku')->with('success', 'Buku berhasil ditambahkan!');
+}
+//update
+    public function update(Request $request, $buku_id)
     {
-        // Validasi input
         $request->validate([
             'judul_buku' => 'required|string|max:40',
             'penulis_id' => 'required|string|exists:penulis,penulis_id',
@@ -52,82 +96,41 @@ public function siswa()
             'rak_id' => 'required|string|exists:rak,rak_id',
             'isbn' => 'required|string|max:16',
             'tahun_terbit' => 'required|integer|digits:4',
-            'gambar_buku' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi gambar
+            'buku_gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi gambar
         ]);
 
+        $buku= Buku::find($buku_id);
+        if (!$buku) {
+            return redirect()->route('buku')->with('error', 'Buku tidak ditemukan!');
+        }
 
-        // Menghasilkan ID secara acak untuk buku
-        $id = mt_rand(1000000000000000, 9999999999999999);
-
-        // Mengatur data buku untuk disimpan
         $data = [
-            'buku_id' => $id,
-            'buku_judul' => $request->input('judul_buku'),
-            'buku_penulis_id' => $request->input('penulis_id'),
-            'buku_penerbit_id' => $request->input('penerbit_id'),
-            'buku_kategori_id' => $request->input('kategori_id'),
-            'buku_rak_id' => $request->input('rak_id'),
-            'buku_isbn' => $request->input('isbn'),
-            'buku_thnterbit' => $request->input('tahun_terbit'),
+        'buku_judul' => $request->input('judul_buku'),
+        'buku_penulis_id' => $request->input('penulis_id'),
+        'buku_penerbit_id' => $request->input('penerbit_id'),
+        'buku_kategori_id' => $request->input('kategori_id'),
+        'buku_rak_id' => $request->input('rak_id'),
+        'buku_isbn' => $request->input('isbn'),
+        'buku_thnterbit' => $request->input('tahun_terbit'),
         ];
-        if ($request->hasFile('gambar_buku')) {
+        if ($request->hasFile('buku_gambar')) {
             // Simpan gambar ke folder 'uploads/buku'
-            $imageName = time() . '.' . $request->gambar_buku->extension();
-            $request->gambar_buku->move(public_path('uploads/buku'), $imageName);
+            $imageName = time() . '.' . $request->buku_gambar->extension();
+            $request->buku_gambar->move(public_path('uploads/buku'), $imageName);
 
             // Masukkan path gambar ke dalam data buku
             $data['buku_gambar'] = 'uploads/buku/' . $imageName;
         }
 
-
-        // Menyimpan data buku ke database
-        Buku::create($data);
-
-        return redirect()->route('buku')->with('success', 'Buku berhasil ditambahkan!');
-    }
-
-    // Method untuk memperbarui data buku
-    public function update(Request $request, $buku_id)
-    {
-        // Validasi input
-        $request->validate([
-            'judul_buku' => 'required|string|max:40',
-            'penulis_id' => 'required|string|exists:penulis,penulis_id',
-            'penerbit_id' => 'required|string|exists:penerbit,penerbit_id',
-            'kategori_id' => 'required|string|exists:kategori,kategori_id',
-            'rak_id' => 'required|string|exists:rak,rak_id',
-            'isbn' => 'required|string|max:16',
-            'tahun_terbit' => 'required|integer|digits:4',
-        ]);
-
-        $buku = Buku::find($buku_id);
-        if (!$buku) {
-            return redirect()->route('buku')->withErrors('Buku tidak ditemukan!');
-        }
-
-        $data = [
-            'buku_judul' => $request->input('judul_buku'),
-            'buku_penulis_id' => $request->input('penulis_id'),
-            'buku_penerbit_id' => $request->input('penerbit_id'),
-            'buku_kategori_id' => $request->input('kategori_id'),
-            'buku_rak_id' => $request->input('rak_id'),
-            'buku_isbn' => $request->input('isbn'),
-            'buku_thnterbit' => $request->input('tahun_terbit'),
-        ];
-
-        // Memperbarui data buku
         $buku->update($data);
-
-        return redirect()->route('buku')->with('success', 'Buku berhasil diperbarui!');
+        return redirect()->route('buku')->with('success', 'Buku berhasil diupdate!');
     }
-
-    // Method untuk menghapus data buku
+    //hapus
     public function delete($buku_id)
     {
-        Buku::destroy($buku_id); // Hapus buku berdasarkan ID
-        return redirect()->route('buku')->with('deleted', 'Buku berhasil dihapus!');
+        Buku::destroy($buku_id);
+        return redirect()->route('buku')->with('success', 'Buku berhasil dihapus!');
     }
-
     // Method untuk menampilkan form edit buku
     public function edit($buku_id)
     {

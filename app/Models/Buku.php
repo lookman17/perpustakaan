@@ -22,6 +22,7 @@ class Buku extends Model
         'buku_rak_id',
         'buku_isbn',
         'buku_thnterbit',
+        'buku_gambar',
     ];
     // ...
     public function index()

@@ -127,4 +127,5 @@ public function upload_profile (Request $request, $id)
     return back()->with('failed', 'Foto profil gagal diperbarui!');
 }
 
+
 }

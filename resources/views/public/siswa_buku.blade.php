@@ -20,13 +20,17 @@
                     @foreach ($bukus as $buku)
                         <div class="card col-12 col-md-4 col-lg-3">
                             <div class="card-body">
-                                @if($buku->buku_urlgambar && file_exists(storage_path('app/public/buku_pictures/' . basename($buku->buku_urlgambar))))
-                                <img src="{{ asset('storage/buku_pictures/' . basename($buku->buku_urlgambar)) }}"
-                                     alt="{{ $buku->buku_judul }}" class="book-img mb-3" style="max-width: 100%; height: auto;" />
-                            @else
-                                <img src="{{ asset('storage/buku_pictures/default_image.png') }}"
-                                     alt="Gambar tidak tersedia" class="book-img mb-3" style="max-width: 100%; height: auto;" />
-                            @endif
+                                <!-- Cek apakah gambar buku tersedia -->
+                                @if($buku->buku_gambar && file_exists(public_path($buku->buku_gambar)))
+                                    <img src="{{ asset($buku->buku_gambar) }}"
+                                         alt="{{ $buku->buku_judul }}" class="book-img mb-3"
+                                         style="max-width: 100%; height: auto;" />
+                                @else
+                                    <!-- Gambar default jika gambar buku tidak tersedia -->
+                                    <img src="{{ asset('storage/buku_pictures/default_image.png') }}"
+                                         alt="Gambar tidak tersedia" class="book-img mb-3"
+                                         style="max-width: 100%; height: auto;" />
+                                @endif
 
                                 <hr />
                                 <p class="text-center fw-bolder fs-4 my-0">

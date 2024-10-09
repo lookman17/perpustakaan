@@ -31,6 +31,7 @@ Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
     Route::get('/admin_peminjam', [PagesController::class, 'adminPeminjam'])->name('adminPeminjam');
     Route::get('/pengaturan', [PagesController::class, 'Pengaturan'])->name('Pengaturan');
     Route::get('/pengaturan_admin', [PagesController::class, 'adminPengaturan'])->name('adminPengaturan');
+        Route::patch('user/{id}/update_profile', [UserController::class, 'upload_profile'])->name('action.upload_profile');
 
     // Modul Penerbit
     Route::prefix('penerbit')->group(function () {
@@ -84,7 +85,6 @@ Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
         Route::put('/{id}', [PeminjamanController::class, 'update'])->name('peminjaman.update');
         Route::delete('/{id}', [PeminjamanController::class, 'destroy'])->name('peminjaman.destroy');
         Route::get('/{id}/status', [PeminjamanController::class, 'status'])->name('peminjaman.status');
-        Route::get('/buku/pinjam/{buku_id}', [PeminjamanController::class, 'pinjam'])->name('buku.pinjam');
         Route::put('/{id}/update-status', [PeminjamanController::class, 'updateStatus'])->name('peminjaman.update-status');
     });
 
@@ -108,6 +108,7 @@ Route::middleware(['web', 'auth', 'role:anggota'])->group(function () {
     Route::get('/siswa_buku', [PagesController::class, 'bukuSiswa'])->name('bukuSiswa');
     Route::get('/create/siswa', [PeminjamanController::class, 'buat'])->name('peminjaman.buat');
     Route::get('/siswa', [PeminjamanController::class, 'siswa'])->name('peminjaman.siswa');
+    Route::get('/buku/pinjam/{buku_id}', [PeminjamanController::class, 'pinjam'])->name('buku.pinjam');
     Route::get('/siswa/buku', [BukuController::class, 'siswa'])->name('siswa.buku');
     Route::get('pengaturan',[PagesController::class, 'Pengaturan'])->name('pengaturan');
     Route::patch('user/{id}/update_profile', [UserController::class, 'upload_profile'])->name('action.upload_profile');
