@@ -243,4 +243,3 @@ public function upload_profile_admin (Request $request, $id)
 }
 
 
-}
