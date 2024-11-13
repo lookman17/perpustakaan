@@ -96,7 +96,6 @@ public function siswa()
             'rak_id' => 'required|string|exists:rak,rak_id',
             'isbn' => 'required|string|max:16',
             'tahun_terbit' => 'required|integer|digits:4',
-            'buku_gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi gambar
         ]);
 
         $buku= Buku::find($buku_id);

@@ -212,3 +212,38 @@ class UserController extends Controller
         return redirect()->route('pengaturan')->with('success', 'Data pengguna berhasil diperbarui.');
     }
 }
+<<<<<<< HEAD
+=======
+public function logout()
+{
+    Auth::logout(); // Logout user yang sedang login
+    return redirect()->route('login')->with('success', 'Anda telah berhasil logout.');
+}
+public function upload_profile (Request $request, $id)
+{
+    if ($request->hasFile('profile')) {
+        $data = $request->file('profile');
+
+        User::upload_profile($id, $data);
+
+        return redirect()->route('pengaturan')->with('success', 'Foto profil berhasil diperbarui!');
+    }
+
+    return back()->with('failed', 'Foto profil gagal diperbarui!');
+}
+public function upload_profile_admin (Request $request, $id)
+{
+    if ($request->hasFile('profile')) {
+        $data = $request->file('profile');
+
+        User::upload_profile($id, $data);
+
+        return redirect()->route('pengaturanAdmin')->with('success', 'Foto profil berhasil diperbarui!');
+    }
+
+    return back()->with('failed', 'Foto profil gagal diperbarui!');
+}
+
+
+}
+>>>>>>> 674af58b049a51b70a81c186ee0a657d53321650
