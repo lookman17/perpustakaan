@@ -212,8 +212,6 @@ class UserController extends Controller
         return redirect()->route('pengaturan')->with('success', 'Data pengguna berhasil diperbarui.');
     }
 }
-<<<<<<< HEAD
-=======
 public function logout()
 {
     Auth::logout(); // Logout user yang sedang login
@@ -246,4 +244,3 @@ public function upload_profile_admin (Request $request, $id)
 
 
 }
->>>>>>> 674af58b049a51b70a81c186ee0a657d53321650
