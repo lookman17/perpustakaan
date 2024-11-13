@@ -12,13 +12,10 @@ use App\Http\Controllers\{
     RakController
 };
 
-<<<<<<< HEAD
 // Rute untuk Halaman Login dan Registrasi (tidak memerlukan autentikasi)
 Route::get('/', function () {
     return redirect()->route('login'); // Mengarahkan ke rute login
 });
-=======
->>>>>>> 674af58b049a51b70a81c186ee0a657d53321650
 
 Route::get('/login', [PagesController::class, 'login'])->name('login');
 Route::post('/user/login', [UserController::class, 'login'])->name('user.login');
@@ -28,19 +25,11 @@ Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
 // Rute yang memerlukan autentikasi dan peran admin
 Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
-<<<<<<< HEAD
-    Route::get('/admin', [PagesController::class, 'dashboardAdmin'])->name('dashboardAdmin');
-=======
->>>>>>> 674af58b049a51b70a81c186ee0a657d53321650
     Route::get('/admin_buku', [PagesController::class, 'adminBuku'])->name('adminBuku');
     Route::get('/admin_peminjam', [PagesController::class, 'adminPeminjam'])->name('adminPeminjam');
     Route::get('/pengaturan_admin', [PagesController::class, 'adminPengaturan'])->name('adminPengaturan');
-<<<<<<< HEAD
     Route::patch('user/{id}/update_profile',[UserController::class,'update'])->name('update_profile');
     Route::patch('/admin/upload-profile/{id}', [UserController::class, 'upload_admin_profile'])->name('admin.uploadProfile');
-=======
-    Route::patch('user/{id}/update_profile_admin', [UserController::class, 'upload_profile_admin'])->name('action.upload_profile');
->>>>>>> 674af58b049a51b70a81c186ee0a657d53321650
 
     // Modul Penerbit
     Route::prefix('penerbit')->group(function () {
@@ -70,10 +59,6 @@ Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
         Route::get('/update/{buku_id}', [BukuController::class, 'edit'])->name('update_buku');
         Route::patch('/{buku_id}', [BukuController::class, 'update'])->name('buku.update');
         Route::delete('/{buku_id}', [BukuController::class, 'delete'])->name('buku.delete');
-<<<<<<< HEAD
-=======
-
->>>>>>> 674af58b049a51b70a81c186ee0a657d53321650
     });
 
     // Modul Penulis

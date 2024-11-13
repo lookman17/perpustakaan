@@ -212,7 +212,7 @@ class UserController extends Controller
         return redirect()->route('pengaturan')->with('success', 'Data pengguna berhasil diperbarui.');
     }
 }
-public function logout()
+ public function logout()
 {
     Auth::logout(); // Logout user yang sedang login
     return redirect()->route('login')->with('success', 'Anda telah berhasil logout.');
