@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Penulis extends Model
 {
@@ -22,13 +23,16 @@ class Penulis extends Model
         'penulis_tgllahir',
     ];
 
-    public static function readPenulis()
+    protected static function readPenulis ()
     {
-        return self::all();
+        $data = DB::table('penulis')->paginate(4);
+
+        return $data;
     }
 
     public static function readPenulisById($id)
     {
         return self::find($id);
     }
+    
 }

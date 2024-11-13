@@ -38,10 +38,12 @@
 </head>
 <body>
     <div class="error-template">
-        <h1>404 </h1>
+        <h1>404</h1>
+        <hr>
         <h2>Not Found</h2>
         <h2>Hayolo!</h2>
         <p>Sepuranya, halaman seng mbok golek i gak tersedia</p>
+        <h6>Luqman Hakim</h6>
     </div>
 </body>
 </html>

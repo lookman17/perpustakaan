@@ -58,7 +58,7 @@
 @section('title', 'Login - Web Perpustakaan')
 
 @section('main')
-    <section class="login-container">
+    <section class="login-container" style="background-color: white !important">
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <strong>Berhasil!</strong> {{ session('success') }}
@@ -71,9 +71,9 @@
             </div>
         @endif
         <div class="card shadow-lg">
-            <div class="card-header">
+            <div class="card-header bg bg-dark">
                 <img src="{{ asset('img/book.png') }}" alt="..." class="img-logo">
-                <h3 class="text-center">Login - Web Perpustakaan</h3>
+                <h3 class="text-center text-white">Login - Web Perpustakaan</h3>
             </div>
             <div class="card-body">
                 <form action="{{ route('user.login') }}" method="POST">

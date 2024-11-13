@@ -33,6 +33,7 @@
                 <table class="table table-bordered">
                     <thead class="table ">
                         <tr>
+                            <th>No</th>
                             <th>Nama Penulis</th>
                             <th>Tempat Lahir</th>
                             <th>Tanggal Lahir</th>
@@ -42,6 +43,7 @@
                     <tbody>
                         @foreach($penuliss as $p)
                         <tr>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $p->penulis_nama_id }}</td>
                             <td>{{ $p->penulis_tmptlahir }}</td>
                             <td>{{ $p->penulis_tgllahir}}</td>
@@ -61,6 +63,7 @@
                     </tbody>
                 </table>
             </div>
+            {{ $penuliss->links('vendor.pagination.bootstrap-5') }}
         </div>
     </main>
 </div>

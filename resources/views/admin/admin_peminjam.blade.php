@@ -32,6 +32,7 @@
                     <table class="table table-bordered">
                         <thead class="table ">
                             <tr>
+                                <th>No</th>
                                 <th>Nama Pengguna</th>
                                 <th>Tanggal Peminjaman</th>
                                 <th>Tanggal Kembali</th>
@@ -43,6 +44,7 @@
                         <tbody>
                             @foreach ($peminjamans as $peminjaman)
                                 <tr>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $peminjaman->user->user_nama }}</td>
                                     <td>{{ \Carbon\Carbon::parse($peminjaman->peminjaman_tglpinjam)->format('d-m-Y') }}</td>
                                     <td>{{ $peminjaman->peminjaman_tglkembali ? \Carbon\Carbon::parse($peminjaman->peminjaman_tglkembali)->format('d-m-Y') : 'Belum Kembali' }}</td>

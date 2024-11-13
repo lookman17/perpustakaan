@@ -25,11 +25,11 @@
                     </div>
                     <div class="form-group">
                         <label for="penulis_tmptlahir">Tempat Lahir</label>
-                        <input type="text" name="penulis_tmptlahir" class="form-control">
+                        <input type="text" name="penulis_tmptlahir" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="penulis_tgllahir">Tanggal Lahir</label>
-                        <input type="date" name="penulis_tgllahir" class="form-control">
+                        <input type="date" name="penulis_tgllahir" class="form-control" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Tambah</button>
                     <a href="{{ route('Penulis') }}" class="btn btn-secondary">Kembali</a>

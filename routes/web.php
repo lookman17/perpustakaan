@@ -1,37 +1,36 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\{
-    RoutesController,
-    RequestController,
-    LoginController,
-    BookController,
     PagesController,
+    UserController,
     PenerbitController,
     KategoriController,
     BukuController,
     PenulisController,
     PeminjamanController,
-    UserController,
     RakController
 };
 
-// Halaman Login dan Registrasi (tidak memerlukan auth)
+// Rute untuk Halaman Login dan Registrasi (tidak memerlukan autentikasi)
+Route::get('/', function () {
+    return redirect()->route('login'); // Mengarahkan ke rute login
+});
+
 Route::get('/login', [PagesController::class, 'login'])->name('login');
 Route::post('/user/login', [UserController::class, 'login'])->name('user.login');
 Route::get('/register', [PagesController::class, 'register'])->name('register');
 Route::post('/user/register', [UserController::class, 'register'])->name('user.register');
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
-
-// Proteksi semua halaman dengan middleware 'auth'
+// Rute yang memerlukan autentikasi dan peran admin
 Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
-    // Halaman Siswa dan Admin
+    Route::get('/admin', [PagesController::class, 'dashboardAdmin'])->name('dashboardAdmin');
     Route::get('/admin_buku', [PagesController::class, 'adminBuku'])->name('adminBuku');
     Route::get('/admin_peminjam', [PagesController::class, 'adminPeminjam'])->name('adminPeminjam');
-    Route::get('/pengaturan', [PagesController::class, 'Pengaturan'])->name('Pengaturan');
     Route::get('/pengaturan_admin', [PagesController::class, 'adminPengaturan'])->name('adminPengaturan');
-        Route::patch('user/{id}/update_profile', [UserController::class, 'upload_profile'])->name('action.upload_profile');
+    Route::patch('user/{id}/update_profile',[UserController::class,'update'])->name('update_profile');
+    Route::patch('/admin/upload-profile/{id}', [UserController::class, 'upload_admin_profile'])->name('admin.uploadProfile');
 
     // Modul Penerbit
     Route::prefix('penerbit')->group(function () {
@@ -61,9 +60,6 @@ Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
         Route::get('/update/{buku_id}', [BukuController::class, 'edit'])->name('update_buku');
         Route::patch('/{buku_id}', [BukuController::class, 'update'])->name('buku.update');
         Route::delete('/{buku_id}', [BukuController::class, 'delete'])->name('buku.delete');
-
-
-
     });
 
     // Modul Penulis
@@ -96,13 +92,11 @@ Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
         Route::get('/{rak_id}/edit', [RakController::class, 'edit'])->name('rak.edit');
         Route::put('/{rak_id}', [RakController::class, 'update'])->name('rak.update');
         Route::delete('/{rak_id}', [RakController::class, 'delete'])->name('rak.delete');
-
-
     });
-    Route::get('/admin', [PagesController::class, 'dashboardAdmin'])->name('dashboardAdmin');
-
-
+    
 });
+
+// Rute yang memerlukan autentikasi dan peran anggota (siswa)
 Route::middleware(['web', 'auth', 'role:anggota'])->group(function () {
     Route::get('/dashboardsiswa', [PagesController::class, 'dashboard'])->name('dashboard');
     Route::get('/siswa_buku', [PagesController::class, 'bukuSiswa'])->name('bukuSiswa');
@@ -111,5 +105,6 @@ Route::middleware(['web', 'auth', 'role:anggota'])->group(function () {
     Route::get('/buku/pinjam/{buku_id}', [PeminjamanController::class, 'pinjam'])->name('buku.pinjam');
     Route::get('/siswa/buku', [BukuController::class, 'siswa'])->name('siswa.buku');
     Route::get('pengaturan',[PagesController::class, 'Pengaturan'])->name('pengaturan');
-    Route::patch('user/{id}/update_profile', [UserController::class, 'upload_profile'])->name('action.upload_profile');
+    Route::patch('user/{id}/update_profile_siswa',[UserController::class,'update_siswa'])->name('update_profile_siswa');
+    Route::patch('user/{id}/upload_profile', [UserController::class, 'upload_profile'])->name('action.upload_profile');
 });

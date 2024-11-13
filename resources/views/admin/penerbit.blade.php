@@ -66,10 +66,10 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        {{ $penerbit->links('vendor.pagination.bootstrap-5') }}
                     </div>
 
                 </div>
+                {{ $penerbit->links('vendor.pagination.bootstrap-5') }}
             </div>
         </main>
 

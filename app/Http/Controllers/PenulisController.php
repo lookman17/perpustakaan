@@ -10,7 +10,7 @@ class PenulisController extends Controller
     // Method untuk menampilkan daftar penulis
     public function index()
     {
-        $penuliss = Penulis::all();
+        $penuliss = Penulis::paginate(4);
         return view('admin.penulis', compact('penuliss')); // Sesuaikan dengan nama view Anda
     }
 

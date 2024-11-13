@@ -10,7 +10,7 @@ class RakController extends Controller
     // Show all Rak records
     public function index()
     {
-        $raks = Rak::all();
+        $raks = Rak::Paginate(4);
         return view('admin.rak', compact('raks'));
     }
 

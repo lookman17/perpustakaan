@@ -97,12 +97,14 @@
 
                     <!-- Input untuk Unggah Gambar Buku -->
                     <div class="form-group mb-3">
-                        <label for="gambar" class="form-label">Gambar Buku</label>
-                        <input type="file" name="buku_gambar" id="buku_gambar" class="form-control" accept="image/*">
+                        <p>Gambar Buku :</p>
+                        
                         @if($buku->buku_gambar)
-                            <img src="{{ asset('storage/img/buku' . basename($buku->buku_gambar)) }}" alt="Gambar Buku" class="mt-2" style="max-width: 150px;">
-                            <small class="form-text text-muted">Gambar saat ini</small>
+                        <img src="{{ asset($buku->buku_gambar) }}"
+                                         alt="{{ $buku->buku_judul }}" class="book-img mb-3"
+                                         style="max-width: 100%; height: auto; width: 200px;height: 300px;object-fit: cover; border-radius: 5px;" />
                         @endif
+                        <input type="file" name="buku_gambar" id="buku_gambar" class="form-control" accept="image/*">
                     </div>
 
                     <button type="submit" class="btn btn-success">Update Buku</button>

@@ -35,6 +35,7 @@
                     <table class="table table-bordered">
                         <thead class="table ">
                             <tr>
+                                <th>No</th>
                                 <th>Nama</th>
                                 <th>Lokasi</th>
                                 <th>Kapasitas</th>
@@ -44,6 +45,7 @@
                         <tbody>
                             @foreach ($raks as $rak)
                                 <tr>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $rak->rak_nama }}</td>
                                     <td>{{ $rak->rak_lokasi }}</td>
                                     <td>{{ $rak->rak_kapasitas }}</td>
@@ -60,6 +62,7 @@
                         </tbody>
                     </table>
                 </div>
+                {{ $raks->links('vendor.pagination.bootstrap-5') }}
             </div>
         </main>
     </div>

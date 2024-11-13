@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Rak extends Model
 {
@@ -21,4 +22,11 @@ class Rak extends Model
         'rak_lokasi',
         'rak_kapasitas',
     ];
+    
+    protected static function readRak ()
+    {
+        $data = DB::table('rak')->paginate(4);
+
+        return $data;
+    }
 }

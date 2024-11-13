@@ -15,7 +15,7 @@ class BukuController extends Controller
     {
         // Mengambil data buku beserta relasinya dan menerapkan pagination
         $bukus = Buku::with(['penulis', 'penerbit', 'kategori', 'rak']) // Mengambil data dengan relasi
-                     ->paginate(10); // Menampilkan 10 data per halaman
+                     ->paginate(6); // Menampilkan 10 data per halaman
 
         return view('admin.admin_buku', [
             'level' => 'admin',
@@ -25,7 +25,7 @@ class BukuController extends Controller
 
 public function siswa()
     {
-        $bukus = Buku::with('penulis')->paginate(9);
+        $bukus = Buku::with('penulis')->paginate(8);
         return view('public.siswa_buku', compact('bukus'));
     }
     // Method untuk menampilkan form tambah buku

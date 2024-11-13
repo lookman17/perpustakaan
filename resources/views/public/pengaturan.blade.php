@@ -11,11 +11,21 @@
 @endsection
 
 @section('main')
+<style>
+    .img-profile {
+    width: 150px; 
+    height: 150px;
+    object-fit: cover; 
+    border-radius: 50%; 
+    border:3px solid black;
+}
+
+</style>
 <div id="layoutSidenav">
     @include('template.sidebar_siswa')
     <div id="layoutSidenav_content">
         <main>
-            <div class="container-fluid px-4">
+            <div class="body container-fluid px-4">
                 <h1 class="mt-4">Pengaturan</h1>
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item active">Halaman Pengaturan Akun</li>
@@ -30,7 +40,9 @@
                     @if ($user->user_pict_url === '')
                         <img src="{{ asset('img/placeholder.png') }}" alt="..." class="rounded-circle img-profile img-thumbnail">
                     @else
-                        <img src="{{ asset('storage/profile_pictures/'.basename($user->user_pict_url)) }}" alt="..." class="rounded-circle img-profile img-thumbnail">
+                    <img src="{{ asset('storage/profile_pictures/' . basename($user->user_pict_url)) }}" alt="..." class="rounded-circle img-profile img-thumbnail">
+
+
                     @endif
                     {{-- Upload Profile Form --}}
                     <form action="{{ route('action.upload_profile', ['id' => $user->user_id]) }}" method="POST" enctype="multipart/form-data">
@@ -45,35 +57,38 @@
                         </div>
                     </form>
                 </div>
-                <form action="" class="my-4 row gap-3">
+                <form action="{{ route('update_profile_siswa', ['id' => $user->user_id]) }}" method="POST" class="my-4 row gap-3">
+                    @csrf
+                    @method('PATCH')
                     <div class="form-group col-12 col-md-4">
                         <label for="nama" class="form-label">Nama Lengkap</label>
-                        <input type="text" class="form-control" name="nama" id="nama">
+                        <input type="text" class="form-control" name="user_nama" id="nama" value="{{ $user->user_nama }}">
                     </div>
                     <div class="form-group col-12 col-md-4">
                         <label for="alamat" class="form-label">Alamat</label>
-                        <input type="text" class="form-control" name="alamat" id="alamat">
+                        <input type="text" class="form-control" name="user_alamat" id="alamat" value="{{ $user->user_alamat }}">
                     </div>
                     <div class="form-group col-12 col-md-4">
                         <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" name="username" id="username">
+                        <input type="text" class="form-control" name="user_username" id="username" value="{{ $user->user_username }}">
                     </div>
                     <div class="form-group col-12 col-md-4">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email" id="email">
+                        <input type="email" class="form-control" name="user_email" id="email" value="{{ $user->user_email }}">
                     </div>
                     <div class="form-group col-12 col-md-4">
                         <label for="notelp" class="form-label">No Telp</label>
-                        <input type="number" class="form-control" name="notelp" id="notelp">
+                        <input type="text" class="form-control" name="user_notelp" id="notelp" value="{{ $user->user_notelp }}">
                     </div>
                     <div class="form-group col-12 col-md-4">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" name="password" id="password">
+                        <input type="password" class="form-control" name="user_password" id="password">
                     </div>
                     <div class="form-group col-12 col-md-4">
-                        <button class="btn btn-primary">Update</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </form>
+                
             </div>
         </main>
     </div>

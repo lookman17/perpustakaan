@@ -18,7 +18,7 @@
             @yield('main')
         </main>
         <footer>
-            @yield('footer')
+            @include('template.footer')
         </footer>
 
         <script src="{{ asset('js/scripts.js') }}"></script>

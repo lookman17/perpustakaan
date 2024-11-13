@@ -78,8 +78,8 @@
                             @endforeach
                         </tbody>
                     </table>
-                    {{ $bukus->links('vendor.pagination.bootstrap-5') }}
                 </div>
+                {{ $bukus->links('vendor.pagination.bootstrap-5') }}
             </div>
         </main>
     </div>
