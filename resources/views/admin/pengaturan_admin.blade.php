@@ -17,7 +17,6 @@
         height: 150px;
         object-fit: cover;
         border-radius: 50%; 
-        border:3px solid black;
     }
 </style>
 <div id="layoutSidenav">
@@ -39,7 +38,8 @@
                     @if ($user->user_pict_url === '')
                         <img src="{{ asset('img/placeholder.png') }}" alt="Profil Default" class="rounded-circle img-profile img-thumbnail">
                     @else
-                        <img src="{{ asset('storage/profile_pictures/'.basename($user->user_pict_url)) }}" alt="Profil Admin" class="rounded-circle img-profile img-thumbnail">
+                    <img src="{{ asset('storage/profile_pictures/'.basename($user->user_pict_url)) }}" alt="Profil Admin" class="rounded-circle img-profile">
+
                     @endif
                     {{-- Upload Profile Form --}}
                     <form action="{{ route('admin.uploadProfile', ['id' => $user->user_id]) }}" method="POST" enctype="multipart/form-data">
@@ -88,6 +88,7 @@
                 </form>
             </div>
         </main>
+        @include('template.footer')
     </div>
 </div>
 @endsection

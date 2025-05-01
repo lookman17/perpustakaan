@@ -25,6 +25,7 @@ Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
 // Rute yang memerlukan autentikasi dan peran admin
 Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
+    Route::get('/dashboard_admin',[PagesController::class,'dashboardAdmin'])->name('dashboardAdmin');
     Route::get('/admin_buku', [PagesController::class, 'adminBuku'])->name('adminBuku');
     Route::get('/admin_peminjam', [PagesController::class, 'adminPeminjam'])->name('adminPeminjam');
     Route::get('/pengaturan_admin', [PagesController::class, 'adminPengaturan'])->name('adminPengaturan');
@@ -73,9 +74,14 @@ Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
 
     // Modul Peminjaman
     Route::prefix('peminjaman')->group(function () {
+        Route::get('/peminjaman/search', [PeminjamanController::class, 'search'])->name('peminjaman.search');
         Route::get('/', [PeminjamanController::class, 'index'])->name('peminjaman');
         Route::get('/create', [PeminjamanController::class, 'create'])->name('peminjaman.create');
         Route::post('/', [PeminjamanController::class, 'store'])->name('peminjaman.store');
+        // routes/web.php
+        Route::get('/peminjaman/cetak/{id}', [PeminjamanController::class, 'cetakStruk'])->name('peminjaman.cetak');
+        Route::get('/laporan/peminjaman', [PeminjamanController::class, 'cetakLaporan'])->name('peminjaman.laporan');
+
         Route::get('/{id}/edit', [PeminjamanController::class, 'edit'])->name('peminjaman.edit');
         Route::put('/{id}', [PeminjamanController::class, 'update'])->name('peminjaman.update');
         Route::delete('/{id}', [PeminjamanController::class, 'destroy'])->name('peminjaman.destroy');
@@ -103,6 +109,7 @@ Route::middleware(['web', 'auth', 'role:anggota'])->group(function () {
     Route::get('/siswa', [PeminjamanController::class, 'siswa'])->name('peminjaman.siswa');
     Route::get('/buku/pinjam/{buku_id}', [PeminjamanController::class, 'pinjam'])->name('buku.pinjam');
     Route::get('/siswa/buku', [BukuController::class, 'siswa'])->name('siswa.buku');
+    Route::post('/buku/pinjam-multiple', [BukuController::class, 'pinjamMultiple'])->name('buku.pinjam.multiple');
     Route::get('pengaturan',[PagesController::class, 'Pengaturan'])->name('pengaturan');
     Route::patch('user/{id}/update_profile_siswa',[UserController::class,'update_siswa'])->name('update_profile_siswa');
     Route::patch('user/{id}/upload_profile', [UserController::class, 'upload_profile'])->name('action.upload_profile');

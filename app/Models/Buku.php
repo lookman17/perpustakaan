@@ -23,8 +23,9 @@ class Buku extends Model
         'buku_isbn',
         'buku_thnterbit',
         'buku_gambar',
+        'buku_stok'
     ];
-    // ...
+    
     public function index()
     {
         $bukus = Buku::with(['penulis', 'penerbit', 'kategori', 'rak']) // Mengambil data dengan relasi

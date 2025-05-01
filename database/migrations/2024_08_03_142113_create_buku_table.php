@@ -21,6 +21,7 @@ return new class extends Migration
             $table->char('buku_isbn', 16)->nullable(false);
             $table->char('buku_thnterbit', 4)->nullable(false);
             $table->string('buku_gambar')->nullable('true');
+            $table->integer('buku_stok')->default(0)->nullable(false); // Kolom stok ditambahkan di sini
 
             // Create Foreign Key
             $table->foreign('buku_penulis_id')->references('penulis_id')->on('penulis')

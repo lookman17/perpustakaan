@@ -8,6 +8,9 @@ use App\Models\KategoriBuku;
 use App\Models\Buku;
 use App\Models\Penulis;
 use App\Models\Peminjam;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use App\Models\Kategori;
 
 class PagesController extends Controller
 {
@@ -25,13 +28,25 @@ class PagesController extends Controller
   }
   public function adminBuku() {
     return view('admin.admin_buku');
+
   }
   public function adminPeminjam() {
     return view('admin.admin_peminjam');
   }
 
   public function dashboardAdmin () {
-    return view('admin.dashboard');
+    $jumlahPengguna = User::count();
+    $jumlahJudul = Buku::count();
+    $jumlahStok = Buku::sum('buku_stok');
+
+    $bukuKategori = DB::table('kategori')
+    ->leftJoin('buku', 'kategori.kategori_id', '=', 'buku.buku_kategori_id')
+    ->select('kategori.kategori_nama', DB::raw('COUNT(buku.buku_id) as total'))
+    ->groupBy('kategori.kategori_nama')
+    ->pluck('total', 'kategori.kategori_nama');
+
+
+    return view('admin.dashboard', compact('jumlahPengguna', 'jumlahJudul', 'jumlahStok', 'bukuKategori'));
 }
 public function bukuSiswa(){
     return view('public.siswa_buku');
@@ -61,8 +76,8 @@ public function update_penerbit ($id) {
 //kategoribuku
 public function kategoriBuku()
 {
-    $kategoris = KategoriBuku::readKategori(); // Mengambil semua kategori
-    return view('admin.kategori_buku', compact('kategoris')); // Mengirim data kategori ke view
+    $kategoris = KategoriBuku::readKategori();
+    return view('admin.kategori_buku', compact('kategoris')); 
 }
 
 // Menampilkan form create kategori

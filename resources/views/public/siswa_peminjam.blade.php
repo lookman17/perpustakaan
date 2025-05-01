@@ -1,5 +1,7 @@
 @extends('template.layout')
-
+@php
+    $user = Auth::user();
+@endphp
 @section('title', 'Peminjaman - Siswa Perpustakaan')
 
 @section('header')
@@ -51,8 +53,12 @@
                                             @endforeach
                                         </td>
                                         <td>{{ $peminjaman->peminjaman_tglpinjam }}</td>
-                                        <td class="badge  {{ $peminjaman->peminjaman_statuskembali ? 'bg-success' : 'bg-warning' }} text-white">
-                                            {{ $peminjaman->peminjaman_statuskembali ? 'Selesai' : 'Dipinjam' }}
+                                        <td>
+                                            @if ($peminjaman->peminjaman_statuskembali)
+                                                <span class="badge bg-success">Selesai</span>
+                                            @else
+                                                <span class="badge bg-warning">Masih Dipinjam</span>
+                                            @endif
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailModal{{ $peminjaman->peminjaman_id }}">
@@ -80,18 +86,21 @@
                                                                 <p><strong>Tanggal Kembali:</strong> {{ $peminjaman->peminjaman_tglkembali ?? 'Belum Kembali' }}</p>
                                                                 <p><strong>Status:</strong> {{ $peminjaman->peminjaman_statuskembali ? 'Selesai' : 'Dipinjam' }}</p>
                                                                 <p><strong>Catatan:</strong> {{ $peminjaman->peminjaman_note ?? 'Tidak ada catatan' }}</p>
-                                                                <p><strong>Denda:</strong> {{ number_format($peminjaman->peminjaman_denda, 2, ',', '.') }}</p>
+                                                                <p>
+                                                                    <strong>Denda Saat Ini:</strong> 
+                                                                    Rp{{ number_format($peminjaman->denda_terhitung ?? $peminjaman->peminjaman_denda ?? 0, 0, ',', '.') }}
+                                                                </p>
+                                                                
                                                             </div>
-                                                            
-                                                            <!-- Gambar Buku -->
+                                                             <!-- Gambar Buku -->
                                                             <div>
-                                                                <img src="{{ asset($detail->buku->buku_gambar) }}" alt="{{ $detail->buku->buku_judul }}" style="width: 150px; height: 200px; object-fit: cover; border-radius: 8px;">
+                                                                <img src="{{ asset($detail->buku->buku_gambar ?? 'default_image.jpg') }}" alt="{{ $detail->buku->buku_judul }}" style="width: 150px; height: 200px; object-fit: cover; border-radius: 8px;">
                                                             </div>
                                                         </div>
                                                         <hr>
                                                     @endforeach
                                                 </div>
-                                                
+                                                 
                                             </div>
                                         </div>
                                     </div>
@@ -106,8 +115,12 @@
                         </div>
                     </div>
                 </div>
+                <br>
+                {{ $peminjamans->links('vendor.pagination.bootstrap-5') }}
             </div>
+            <br>
         </main>
+        @include('template.footer')
     </div>
 </div>
 @endsection

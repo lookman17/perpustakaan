@@ -34,5 +34,9 @@ class Penulis extends Model
     {
         return self::find($id);
     }
+    protected static function deletePenulis ($id)
+    {
+        return DB::table('penulis')->where('penulis_id', $id)->delete();
+    }
     
 }

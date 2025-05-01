@@ -75,7 +75,8 @@ class PenulisController extends Controller
     // Method untuk menghapus data penulis
     public function delete($id)
     {
-        Penulis::destroy($id);
+        Penulis::deletePenulis($id);
+
         return redirect()->route('Penulis')->with('deleted', 'Data penulis berhasil dihapus!');
     }
 }

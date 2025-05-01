@@ -1,5 +1,7 @@
 @extends('template.layout')
-
+@php
+    $user = Auth::user();
+@endphp
 @section('title', 'Halaman Update Kategori Buku')
 
 @section('header')
@@ -30,6 +32,7 @@
                 </form>
             </div>
         </main>
+        @include('template.footer')
     </div>
 </div>
 @endsection

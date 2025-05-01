@@ -1,5 +1,7 @@
 @extends('template.layout')
-
+@php
+    $user = Auth::user();
+@endphp
 @section('title', 'Tambah Pengguna - Admin Perpustakaan')
 
 @section('header')
@@ -50,7 +52,9 @@
                     <a href="{{ route('user.index') }}" class="btn btn-secondary">Kembali</a>
                 </form>
             </div>
+            
         </main>
+        @include('template.footer')
     </div>
 </div>
 @endsection

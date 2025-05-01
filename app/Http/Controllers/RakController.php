@@ -62,7 +62,7 @@ class RakController extends Controller
     }
 
     // Delete a Rak from the database
-    public function destroy($rak_id)
+    public function delete($rak_id)
     {
         $rak = Rak::findOrFail($rak_id);
         $rak->delete();

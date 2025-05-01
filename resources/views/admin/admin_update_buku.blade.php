@@ -1,5 +1,7 @@
 @extends('template.layout')
-
+@php
+    $user = Auth::user();
+@endphp
 @section('title', 'Update Buku - Admin Perpustakaan')
 
 @section('header')
@@ -8,7 +10,7 @@
 
 @section('main')
 <div id="layoutSidenav">
-    @include('template.sidebar_admin')
+    @include('template.sidebar_admin') <!-- Sidebar tetap seperti sebelumnya -->
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
@@ -32,90 +34,89 @@
                     @csrf
                     @method('PATCH')
 
-                    <div class="form-group mb-3">
-                        <label for="judul_buku" class="form-label">Judul Buku</label>
-                        <input type="text" name="judul_buku" id="judul_buku" class="form-control" value="{{ $buku->buku_judul }}" placeholder="Masukkan Judul Buku" required>
+                    <!-- Flex Group untuk 2 Inputan per Baris -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="judul_buku" class="form-label">Judul Buku</label>
+                            <input type="text" name="judul_buku" id="judul_buku" class="form-control" value="{{ $buku->buku_judul }}" placeholder="Masukkan Judul Buku" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="penulis_id" class="form-label">Penulis Buku</label>
+                            <select name="penulis_id" id="penulis_id" class="form-control" required>
+                                <option value="" disabled>Pilih Penulis Buku</option>
+                                @foreach($penulis as $p)
+                                    <option value="{{ $p->penulis_id }}" {{ $p->penulis_id == $buku->buku_penulis_id ? 'selected' : '' }}>
+                                        {{ $p->penulis_nama_id }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label for="penulis_id" class="form-label">Penulis Buku</label>
-                        <select name="penulis_id" id="penulis_id" class="form-control" required>
-                            <option value="" disabled>Pilih Penulis Buku</option>
-                            @foreach($penulis as $p)
-                                <option value="{{ $p->penulis_id }}" {{ $p->penulis_id == $buku->buku_penulis_id ? 'selected' : '' }}>
-                                    {{ $p->penulis_nama_id }}
-                                </option>
-                            @endforeach
-                        </select>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="penerbit_id" class="form-label">Penerbit Buku</label>
+                            <select name="penerbit_id" id="penerbit_id" class="form-control" required>
+                                <option value="" disabled>Pilih Penerbit Buku</option>
+                                @foreach($penerbit as $p)
+                                    <option value="{{ $p->penerbit_id }}" {{ $p->penerbit_id == $buku->buku_penerbit_id ? 'selected' : '' }}>
+                                        {{ $p->penerbit_nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="tahun_terbit" class="form-label">Tahun Terbit</label>
+                            <input type="number" name="tahun_terbit" id="tahun_terbit" class="form-control" value="{{ $buku->buku_thnterbit }}" placeholder="Masukkan Tahun Terbit" required>
+                        </div>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label for="penerbit_id" class="form-label">Penerbit Buku</label>
-                        <select name="penerbit_id" id="penerbit_id" class="form-control" required>
-                            <option value="" disabled>Pilih Penerbit Buku</option>
-                            @foreach($penerbit as $p)
-                                <option value="{{ $p->penerbit_id }}" {{ $p->penerbit_id == $buku->buku_penerbit_id ? 'selected' : '' }}>
-                                    {{ $p->penerbit_nama }}
-                                </option>
-                            @endforeach
-                        </select>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="kategori_id" class="form-label">Kategori Buku</label>
+                            <select name="kategori_id" id="kategori_id" class="form-control" required>
+                                <option value="" disabled>Pilih Kategori Buku</option>
+                                @foreach($kategori as $k)
+                                    <option value="{{ $k->kategori_id }}" {{ $k->kategori_id == $buku->buku_kategori_id ? 'selected' : '' }}>
+                                        {{ $k->kategori_nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="rak_id" class="form-label">Rak Buku</label>
+                            <select name="rak_id" id="rak_id" class="form-control" required>
+                                <option value="" disabled>Pilih Rak Buku</option>
+                                @foreach($rak as $r)
+                                    <option value="{{ $r->rak_id }}" {{ $r->rak_id == $buku->buku_rak_id ? 'selected' : '' }}>
+                                        {{ $r->rak_nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label for="tahun_terbit" class="form-label">Tahun Terbit</label>
-                        <input type="number" name="tahun_terbit" id="tahun_terbit" class="form-control" value="{{ $buku->buku_thnterbit }}" placeholder="Masukkan Tahun Terbit" required>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="isbn" class="form-label">ISBN</label>
+                            <input type="text" name="isbn" id="isbn" class="form-control" value="{{ $buku->buku_isbn }}" placeholder="Masukkan ISBN Buku" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="buku_gambar" class="form-label">Gambar Buku</label>
+                            <input type="file" name="buku_gambar" id="buku_gambar" class="form-control" accept="image/*">
+                            @if($buku->buku_gambar)
+                                <img src="{{ asset($buku->buku_gambar) }}" alt="{{ $buku->buku_judul }}" class="img-thumbnail mt-2" style="max-width: 200px; height: auto;">
+                            @endif
+                        </div>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label for="kategori_id" class="form-label">Kategori Buku</label>
-                        <select name="kategori_id" id="kategori_id" class="form-control" required>
-                            <option value="" disabled>Pilih Kategori Buku</option>
-                            @foreach($kategori as $k)
-                                <option value="{{ $k->kategori_id }}" {{ $k->kategori_id == $buku->buku_kategori_id ? 'selected' : '' }}>
-                                    {{ $k->kategori_nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="rak_id" class="form-label">Rak Buku</label>
-                        <select name="rak_id" id="rak_id" class="form-control" required>
-                            <option value="" disabled>Pilih Rak Buku</option>
-                            @foreach($rak as $r)
-                                <option value="{{ $r->rak_id }}" {{ $r->rak_id == $buku->buku_rak_id ? 'selected' : '' }}>
-                                    {{ $r->rak_nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="isbn" class="form-label">ISBN</label>
-                        <input type="text" name="isbn" id="isbn" class="form-control" value="{{ $buku->buku_isbn }}" placeholder="Masukkan ISBN Buku" required>
-                    </div>
-
-                    <!-- Input untuk Unggah Gambar Buku -->
-                    <div class="form-group mb-3">
-                        <p>Gambar Buku :</p>
-                        
-                        @if($buku->buku_gambar)
-<<<<<<< HEAD
-                        <img src="{{ asset($buku->buku_gambar) }}"
-                                         alt="{{ $buku->buku_judul }}" class="book-img mb-3"
-                                         style="max-width: 100%; height: auto; width: 200px;height: 300px;object-fit: cover; border-radius: 5px;" />
-=======
-                            <img src="{{ asset('storage/img/buku' . basename($buku->buku_gambar)) }}" alt="Gambar Buku" class="mt-2" style="max-width: 150px;">
->>>>>>> 674af58b049a51b70a81c186ee0a657d53321650
-                        @endif
-                        <input type="file" name="buku_gambar" id="buku_gambar" class="form-control" accept="image/*">
-                    </div>
-
-                    <button type="submit" class="btn btn-success">Update Buku</button>
+                    <button type="submit" class="btn btn-primary">Update Buku</button>
                     <a href="{{ route('buku') }}" class="btn btn-secondary">Kembali</a>
                 </form>
+                <br>
             </div>
         </main>
+        @include('template.footer')
     </div>
 </div>
 @endsection

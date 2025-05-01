@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -43,29 +44,44 @@ class UserController extends Controller
 
         return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
-*/
-    public function register(Request $request)
-    {
-        $id = mt_rand(1000000000000000, 9999999999999999);
+*/ 
+public function register(Request $request)
+{
+    // Validasi input
+    $request->validate([
+        'nama' => 'required|string|max:255',
+        'alamat' => 'required|string|max:255',
+        'username' => 'required|string|max:255|unique:users,user_username',
+        'email' => 'required|string|email|max:255|unique:users,user_email',
+        'notelp' => 'required|digits_between:10,13',
+        'password' => 'required|string|min:8',
+    ]);
 
-        $data = [
-            'user_id' => $id,
-            'user_nama' => $request->input('nama'),
-            'user_alamat' => $request->input('alamat'),
-            'user_username' => $request->input('username'),
-            'user_email' => $request->input('email'),
-            'user_notelp' => $request->input('notelp'),
-            'user_password' => bcrypt($request->input('password'))
-        ];
+    // Membuat ID user secara acak
+    $id = mt_rand(1000000000000000, 9999999999999999);
 
-        $user = User::register($data);
+    // Menyimpan data user
+    $data = [
+        'user_id' => $id,
+        'user_nama' => $request->input('nama'),
+        'user_alamat' => $request->input('alamat'),
+        'user_username' => $request->input('username'),
+        'user_email' => $request->input('email'),
+        'user_notelp' => $request->input('notelp'),
+        'user_password' => bcrypt($request->input('password')),
+        'user_pict_url' => 'storage/profil_pictures/default-profil.png', 
+    ];
+    
 
-        if ($user) {
-            return redirect()->route('login')->with('success', 'Pendaftaran akun berhasil!');
-        } else {
-            return back()->withInput();
-        }
+    $user = User::register($data);
+
+    if ($user) {
+        return redirect()->route('login')->with('success', 'Pendaftaran akun berhasil!');
+    } else {
+        return back()->withInput();
     }
+}
+
     public function login(Request $request)
     {
         $credentials = [
@@ -211,35 +227,5 @@ class UserController extends Controller
 
         return redirect()->route('pengaturan')->with('success', 'Data pengguna berhasil diperbarui.');
     }
+    
 }
- public function logout()
-{
-    Auth::logout(); // Logout user yang sedang login
-    return redirect()->route('login')->with('success', 'Anda telah berhasil logout.');
-}
-public function upload_profile (Request $request, $id)
-{
-    if ($request->hasFile('profile')) {
-        $data = $request->file('profile');
-
-        User::upload_profile($id, $data);
-
-        return redirect()->route('pengaturan')->with('success', 'Foto profil berhasil diperbarui!');
-    }
-
-    return back()->with('failed', 'Foto profil gagal diperbarui!');
-}
-public function upload_profile_admin (Request $request, $id)
-{
-    if ($request->hasFile('profile')) {
-        $data = $request->file('profile');
-
-        User::upload_profile($id, $data);
-
-        return redirect()->route('pengaturanAdmin')->with('success', 'Foto profil berhasil diperbarui!');
-    }
-
-    return back()->with('failed', 'Foto profil gagal diperbarui!');
-}
-
-

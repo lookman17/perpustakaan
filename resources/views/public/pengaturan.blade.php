@@ -12,14 +12,7 @@
 
 @section('main')
 <style>
-    .img-profile {
-    width: 150px; 
-    height: 150px;
-    object-fit: cover; 
-    border-radius: 50%; 
-    border:3px solid black;
-}
-
+    
 </style>
 <div id="layoutSidenav">
     @include('template.sidebar_siswa')
@@ -40,7 +33,7 @@
                     @if ($user->user_pict_url === '')
                         <img src="{{ asset('img/placeholder.png') }}" alt="..." class="rounded-circle img-profile img-thumbnail">
                     @else
-                    <img src="{{ asset('storage/profile_pictures/' . basename($user->user_pict_url)) }}" alt="..." class="rounded-circle img-profile img-thumbnail">
+                    <img src="{{ asset('storage/profile_pictures/' . basename($user->user_pict_url)) }}" alt="..." class="img-profile img-thumbnail">
 
 
                     @endif
@@ -91,6 +84,7 @@
                 
             </div>
         </main>
+        @include('template.footer')
     </div>
 </div>
 @endsection

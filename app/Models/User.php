@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable implements AuthenticatableContract
 {
@@ -30,28 +31,35 @@ class User extends Authenticatable implements AuthenticatableContract
     ];
 
     // Metode untuk mengupload profil
-    public static function upload_profile($id, $data)
-    {
-        $user = self::find($id);
 
-        if ($user) {
-            // Hapus gambar lama jika ada
-            if ($user->user_pict_url) {
-                Storage::delete($user->user_pict_url);
-            }
+public static function upload_profile($id, $data)
+{
+    $user = self::find($id);
 
-            // Simpan gambar baru
-            if ($data) {
-                $path = $data->store('public/profile_pictures');
-                $user->user_pict_url = $path; // Simpan URL ke dalam kolom
-            }
-
-            $user->save(); // Simpan perubahan ke database
-            return true; // Kembalikan true jika berhasil
+    if ($user) {
+        // Hapus gambar lama jika ada (dan bukan default gambar)
+        if ($user->user_pict_url && Storage::exists($user->user_pict_url)) {
+            Storage::delete($user->user_pict_url);
         }
 
-        return false; // Kembalikan false jika tidak menemukan user
+        // Simpan gambar baru
+        if ($data) {
+            $fileName = time() . '.' . $data->getClientOriginalExtension();
+            $path = $data->storeAs('public/profile_pictures', $fileName);
+
+            // Update database dengan path yang benar
+            $user->user_pict_url = str_replace('public/', 'storage/', $path);
+            $user->save();
+
+            Log::info("Foto profil berhasil diunggah.", ['user_id' => $user->user_id, 'path' => $user->user_pict_url]);
+
+            return true;
+        }
     }
+
+    return false;
+}
+
 
     // Metode untuk upload profil admin
     public function upload_admin_profile($request, $id)

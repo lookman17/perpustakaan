@@ -1,5 +1,7 @@
 @extends('template.layout')
-
+@php
+    $user = Auth::user();
+@endphp
 @section('title', 'Edit Rak')
 
 @section('header')
@@ -51,6 +53,7 @@
                 </form>
             </div>
         </main>
+        @include('template.footer')
     </div>
 </div>
 @endsection

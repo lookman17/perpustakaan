@@ -1,4 +1,7 @@
 @extends('template.layout')
+@php
+    $user = Auth::user();
+@endphp
 
 @section('title', 'Tambah Rak')
 
@@ -13,32 +16,69 @@
         <main>
             <div class="container-fluid px-4">
                 <h1 class="mt-4">Tambah Rak</h1>
-                <form action="{{ route('rak.store') }}" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label for="rak_nama">Nama Rak *</label>
-                        <input type="text" name="rak_nama" class="form-control" required>
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <strong>Form Tambah Buku Baru</strong>
                     </div>
-                    <div class="form-group">
-                        <label for="rak_lokasi">Lokasi *</label>
-                        <input type="text" name="rak_lokasi" class="form-control" required>
+                    <div class="card-body">
+                        <form action="{{ route('rak.store') }}" method="POST" class="row g-3">
+                            @csrf
+
+                            @if(session('success'))
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    {{ session('success') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endif
+
+                            @if($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            <div class="col-md-6">
+                                <label for="rak_nama" class="form-label">Nama Rak</label>
+                                <input type="text" name="rak_nama" id="rak_nama" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="rak_lokasi" class="form-label">Lokasi</label>
+                                <input type="text" name="rak_lokasi" id="rak_lokasi" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="rak_kapasitas" class="form-label">Kapasitas</label>
+                                <select name="rak_kapasitas" id="rak_kapasitas" class="form-select" required>
+                                    <option value="" disabled selected>Pilih Kapasitas</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="25">25</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-save"></i> Simpan
+                                </button>
+                                <a href="{{ route('rak.index') }}" class="btn btn-secondary ms-2">
+                                    <i class="bi bi-arrow-left-circle"></i> Kembali
+                                </a>
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label for="rak_kapasitas">Kapasitas *</label>
-                        <select name="rak_kapasitas" class="form-control" required>
-                            <option value="" disabled selected>Pilih Kapasitas</option>
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                            <option value="30">30</option>
-                            <option value="50">50</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Tambah Rak</button>
-                    <a href="{{ route('rak.index') }}" class="btn btn-secondary">Kembali</a>
-                </form>
+                </div>
+
             </div>
         </main>
+        @include('template.footer')
     </div>
 </div>
 @endsection

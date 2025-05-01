@@ -1,5 +1,7 @@
 @extends('template.layout')
-
+@php
+    $user = Auth::user();
+@endphp
 @section('title', 'Update Penulis - Admin Perpustakaan')
 
 @section('header')
@@ -37,6 +39,7 @@
 
             </div>
         </main>
+        @include('template.footer')
     </div>
 </div>
 @endsection
