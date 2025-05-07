@@ -14,7 +14,7 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Kategori Buku</h1>
+                <h1 class="mt-4">Donatur Buku</h1>
                 <nav aria-label="breadcrumb" class="mb-4">
                     <ol class="breadcrumb bg-light rounded-3 p-3 shadow-sm">
                         <li class="breadcrumb-item"><a href="{{ url('/admin/dashboard') }}" class="text-decoration-none text-primary fw-medium"></i> Kategori Buku</a></li>
@@ -34,13 +34,13 @@
                     </div>
                 @endif
                 <div class="row mb-3 align-items-center">
-                    <div class="col-md-1"> <!-- Tambahkan margin bawah pada mobile -->
-                        <a href="{{ route('create_kategori_buku') }}" class="btn btn-primary w-100"><i class="fas fa-plus"></i></a>
+                    <div class="col-md-1">
+                        <a href="{{ route('create_donatur') }}" class="btn btn-primary w-100"><i class="fas fa-plus"></i></a>
                     </div>
                     <div class="col-md-6">
-                        <form action="{{ route('kategoriBuku') }}" method="GET">
+                        <form action="{{ route('donatur') }}" method="GET">
                             <div class="input-group w-100">
-                                <input type="text" name="search" class="form-control" placeholder="Cari kategori..." value="{{ request('search') }}">
+                                <input type="text" name="search" class="form-control" placeholder="Cari donatur..." value="{{ request('search') }}">
                                 <button class="btn btn-primary" type="submit">Cari</button>
                             </div>
                         </form>
@@ -52,28 +52,31 @@
                         <thead class="table">
                             <tr>
                                 <th>No</th>
-                                <th>Kategori Buku</th>
+                                <th>Nama Donatur</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($kategoris as $index => $kategori)
+                            @foreach($donaturs as $index => $donatur)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $kategori->kategori_nama }}</td>
+                                    <td>{{ $index   + 1 }}</td>
+                                    <td>{{ $donatur->donatur_nama }}</td>
                                     <td>
-                                        <a href="{{ route('update_kategori', ['kategori_id' => $kategori->kategori_id]) }}">
+                                        <a href="{{ route('update_donatur', ['donatur_id' => $donatur->donatur_id]) }}">
                                             <button class="btn btn-warning"><i class="fas fa-pencil"></i></button>
                                         </a>
-                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapusModal{{ $kategori->kategori_id }}">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
+                                        <form action="{{ route('donatur.delete', ['donatur_id' => $donatur->donatur_id]) }}" method="POST">
+
+                                            @csrf
+                                            @method('DELETE')
+                                            <button>o</button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                    {{ $kategoris->links('vendor.pagination.bootstrap-5') }}
+                    {{ $donaturs->links('vendor.pagination.bootstrap-5') }}
 
                 </div>
            

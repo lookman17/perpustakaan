@@ -1,7 +1,9 @@
 @extends('template.layout')
+
 @php
     $user = Auth::user();
 @endphp
+
 @section('title', 'Daftar Peminjaman')
 
 @section('header')
@@ -9,180 +11,189 @@
 @endsection
 
 @section('main')
-<div id="layoutSidenav">
-    @include('template.sidebar_admin')
-    <div id="layoutSidenav_content">
-        <main>
-            <div class="container-fluid px-4">
-                <h1 class="mt-4">Peminjaman</h1>
-                <nav aria-label="breadcrumb" class="mb-4">
-                    <ol class="breadcrumb bg-light rounded-3 p-3 shadow-sm">
-                        <li class="breadcrumb-item"><a href="{{ url('/admin/dashboard') }}" class="text-decoration-none text-primary fw-medium"></i>Peminjaman</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Kelola</li>
-                    </ol>
-                </nav>
-                @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>Berhasil!</strong> {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                @elseif (session('deleted'))
-                <div class="alert alert-info alert-dismissible fade show" role="alert">
-                    <strong>Berhasil!</strong> {{ session('deleted') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                @endif
-                <a href="{{ route('peminjaman.create') }}" class="btn btn-primary mb-3">Tambah Peminjaman</a>
-                <!-- Form Filter Periode untuk Cetak Laporan -->
-                <form action="{{ route('peminjaman.laporan') }}" method="GET" class="mb-3 d-flex gap-2 align-items-end">
-                    <div>
-                        <label for="periode" class="form-label">Periode</label>
-                        <select name="periode" id="periode" class="form-control" onchange="toggleDateFields()">
-                            <option value="">Pilih Periode</option>
-                            <option value="semua" {{ request('periode') == 'semua' ? 'selected' : '' }}>Semua History Peminjaman</option>
-                            <option value="range" {{ request('periode') == 'range' ? 'selected' : '' }}>Rentang Tanggal</option>
-                        </select>
-                    </div>
-                
-                    <div id="start_date_div" style="{{ request('periode') == 'range' ? '' : 'display:none;' }}">
-                        <label for="start_date" class="form-label">Dari Tanggal</label>
-                        <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
-                    </div>
-                
-                    <div id="end_date_div" style="{{ request('periode') == 'range' ? '' : 'display:none;' }}">
-                        <label for="end_date" class="form-label">Sampai Tanggal</label>
-                        <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
-                    </div>
-                
-                    <div>
-                        <button type="submit" class="btn btn-success">
-                            <i class="fas fa-print"></i> Cetak Laporan
-                        </button>
-                    </div>
-                </form>
-                
+    <div id="layoutSidenav">
+        @include('template.sidebar_admin')
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Peminjaman</h1>
+                    <nav aria-label="breadcrumb" class="mb-4">
+                        <ol class="breadcrumb bg-light rounded-3 p-3 shadow-sm">
+                            <li class="breadcrumb-item"><a href="{{ url('/admin/dashboard') }}" class="text-decoration-none text-primary fw-medium">Peminjaman</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Kelola</li>
+                        </ol>
+                    </nav>
 
-                <!-- Form Pencarian -->
-                <form action="{{ route('peminjaman.search') }}" method="GET" class="mb-3">
-                    <div class="input-group">
-                        <input type="text" name="search" class="form-control" placeholder="Cari Nama Pengguna atau Judul Buku..." value="{{ request('search') }}">
-                        <button class="btn btn-primary" type="submit">Cari</button>
-                    </div>
-                </form>
-                
+                    @if (session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Berhasil!</strong> {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @elseif (session('deleted'))
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            <strong>Berhasil!</strong> {{ session('deleted') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
 
-                <div class="table-responsive card bg-light">
-                    <table class="table table-bordered">
-                        <thead class="table ">
-                            <tr>
-                                <th>No</th>
-                                <th>Nama Pengguna</th>
-                                <th>Tanggal Peminjaman</th>
-                                <th>Tanggal Kembali</th>
-                                <th>Status Kembali</th>
-                                <th>Detail Buku</th>
-                                <th>Aksi</th>
-                                <th>Cetak Pdf</th>
-                                
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($peminjamans as $peminjaman)
+                    <!-- Form Laporan dan Pencarian -->
+                    <div class="row mb-3 align-items-end g-3">
+                        <!-- Form Laporan -->
+                        <form id="laporanForm" action="{{ route('peminjaman.laporan') }}" method="GET" class="row g-3 col-md-12">
+                            <div class="col-md-3">
+                                <label for="periode" class="form-label">Periode</label>
+                                <select name="periode" id="periode" class="form-control" onchange="toggleDateFields()">
+                                    <option value="">Pilih Periode</option>
+                                    <option value="semua" {{ request('periode') == 'semua' ? 'selected' : '' }}>Semua History</option>
+                                    <option value="range" {{ request('periode') == 'range' ? 'selected' : '' }}>Rentang Tanggal</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3" id="start_date_div" style="{{ request('periode') == 'range' ? '' : 'display:none;' }}">
+                                <label for="start_date" class="form-label">Dari Tanggal</label>
+                                <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
+                            </div>
+
+                            <div class="col-md-3" id="end_date_div" style="{{ request('periode') == 'range' ? '' : 'display:none;' }}">
+                                <label for="end_date" class="form-label">Sampai Tanggal</label>
+                                <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
+                            </div>
+
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fas fa-print"></i> Cetak Laporan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Baris kedua: Tombol Tambah dan Pencarian -->
+                    <div class="row mt-3">
+                        <!-- Tombol Tambah -->
+                        <div class="col-md-1">
+                            <a href="{{ route('peminjaman.create') }}" class="btn btn-primary w-100">
+                                <i class="fas fa-plus"></i>
+                            </a>
+                        </div>
+
+                        <!-- Form Pencarian -->
+                        <div class="col-md-6">
+                            <form action="{{ route('peminjaman.search') }}" method="GET" class="d-flex">
+                                <input type="text" name="search" class="form-control me-2" placeholder="Cari Nama Pengguna atau Judul Buku..." value="{{ request('search') }}">
+                                <button class="btn btn-primary" type="submit">Cari</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Tabel Data Peminjaman -->
+                    <div class="table-responsive mt-4">
+                        <table class="table">
+                            <thead class="table">
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $peminjaman->user->user_nama }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($peminjaman->peminjaman_tglpinjam)->format('d-m-Y') }}</td>
-                                    <td>{{ $peminjaman->peminjaman_tglkembali ? \Carbon\Carbon::parse($peminjaman->peminjaman_tglkembali)->format('d-m-Y') : 'Belum Kembali' }}</td>
-                                    <td>
-                                        @if ($peminjaman->peminjaman_statuskembali)
-                                            <span class="badge bg-success">Selesai</span>
-                                        @else
-                                            <span class="badge bg-warning">Masih Dipinjam</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @foreach ($peminjaman->details as $detail)
-                                            {{ $detail->buku->buku_judul }}<br>
-                                        @endforeach
-                                    </td>
-                                    <td class="d-flex gap-2">
-                                        <a href="{{ route('peminjaman.status', $peminjaman->peminjaman_id) }}" class="btn btn-warning text-white">Status</a>
-                        
-                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapusModal{{ $peminjaman->peminjaman_id }}">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('peminjaman.cetak', $peminjaman->peminjaman_id) }}" class="btn btn-info" target="_blank">
-                                            <i class="fas fa-print"></i>
-                                        </a>
-                                    </td>
+                                    <th>No</th>
+                                    <th>Nama Pengguna</th>
+                                    <th>Tanggal Peminjaman</th>
+                                    <th>Tanggal Kembali</th>
+                                    <th>Status Kembali</th>
+                                    <th>Detail Buku</th>
+                                    <th>Aksi</th>
+                                    <th>Cetak Pdf</th>
                                 </tr>
-                        
-                                <!-- Modal Hapus -->
-                                <div class="modal fade" id="hapusModal{{ $peminjaman->peminjaman_id }}" tabindex="-1" aria-labelledby="hapusModalLabel{{ $peminjaman->peminjaman_id }}" aria-hidden="true">
-                                  <div class="modal-dialog">
-                                    <div class="modal-content">
-                                      <form action="{{ route('peminjaman.destroy', $peminjaman->peminjaman_id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <div class="modal-header">
-                                          <h5 class="modal-title" id="hapusModalLabel{{ $peminjaman->peminjaman_id }}">Konfirmasi Hapus</h5>
-                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="text-center text-warning mb-3">
-                                                <i class="fas fa-exclamation-triangle fa-3x"></i>
+                            </thead>
+                            <tbody>
+                                @forelse ($peminjamans as $peminjaman)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $peminjaman->user->user_nama }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($peminjaman->peminjaman_tglpinjam)->format('d-m-Y') }}</td>
+                                        <td>{{ $peminjaman->peminjaman_tglkembali ? \Carbon\Carbon::parse($peminjaman->peminjaman_tglkembali)->format('d-m-Y') : 'Belum Kembali' }}</td>
+                                        <td>
+                                            @if ($peminjaman->peminjaman_statuskembali)
+                                                <span class="badge bg-success">Selesai</span>
+                                            @else
+                                                <span class="badge bg-warning">Masih Dipinjam</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @foreach ($peminjaman->details as $detail)
+                                                {{ $detail->buku->buku_judul }}<br>
+                                            @endforeach
+                                        </td>
+                                        <td class="d-flex gap-2">
+                                            <a href="{{ route('peminjaman.status', $peminjaman->peminjaman_id) }}" class="btn btn-warning text-white">Status</a>
+
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapusModal{{ $peminjaman->peminjaman_id }}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('peminjaman.cetak', $peminjaman->peminjaman_id) }}" class="btn btn-info" target="_blank">
+                                                <i class="fas fa-print"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Modal Hapus -->
+                                    <div class="modal fade" id="hapusModal{{ $peminjaman->peminjaman_id }}" tabindex="-1" aria-labelledby="hapusModalLabel{{ $peminjaman->peminjaman_id }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form action="{{ route('peminjaman.destroy', $peminjaman->peminjaman_id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="hapusModalLabel{{ $peminjaman->peminjaman_id }}">Konfirmasi Hapus</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="text-center text-warning mb-3">
+                                                            <i class="fas fa-exclamation-triangle fa-3x"></i>
+                                                        </div>
+                                                        Apakah Anda yakin ingin menghapus peminjaman oleh <strong>{{ $peminjaman->user->user_nama }}</strong>?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                        <button type="submit" class="btn btn-danger">Hapus</button>
+                                                    </div>
+                                                </form>
                                             </div>
-                                            Apakah Anda yakin ingin menghapus peminjaman oleh <strong>{{ $peminjaman->user->user_nama }}</strong>?
                                         </div>
-                                        
-                                        <div class="modal-footer">
-                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                          <button type="submit" class="btn btn-danger">Hapus</button>
-                                        </div>
-                                      </form>
                                     </div>
-                                  </div>
-                                </div>
-                        
-                            @empty
-                                <tr>
-                                    <td colspan="8" class="text-center">Data tidak ditemukan</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                        
-                        
-                    </table>
+                                @empty
+                                    <tr>
+                                        <td colspan="8" class="text-center">Data tidak ditemukan</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <br>
+                    {{ $peminjamans->links('vendor.pagination.bootstrap-5') }}
                 </div>
-                <br>
-                {{ $peminjamans->links('vendor.pagination.bootstrap-5') }}
-            </div>
-        
-        </main>
-        <br>
-        @include('template.footer')
+            </main>
+            <br>
+            @include('template.footer')
+        </div>
     </div>
-</div>
 
-<script>
-    function toggleDateFields() {
-        var periode = document.getElementById('periode').value;
-        var startDateDiv = document.getElementById('start_date_div');
-        var endDateDiv = document.getElementById('end_date_div');
+    <script>
+        function toggleDateFields() {
+            var periode = document.getElementById('periode').value;
+            var startDateDiv = document.getElementById('start_date_div');
+            var endDateDiv = document.getElementById('end_date_div');
 
-        if (periode == 'range') {
-            startDateDiv.style.display = 'block';
-            endDateDiv.style.display = 'block';
-        } else {
-            startDateDiv.style.display = 'none';
-            endDateDiv.style.display = 'none';
+            if (periode == 'range') {
+                startDateDiv.style.display = 'block';
+                endDateDiv.style.display = 'block';
+            } else {
+                startDateDiv.style.display = 'none';
+                endDateDiv.style.display = 'none';
+            }
         }
-    }
-</script>
-
+    </script>
 @endsection
+
 
 {{-- @extends('template.layout')
 
@@ -244,7 +255,7 @@
                             <div class="input-group input-group-sm">
                                 <input type="text" name="search" class="form-control" placeholder="Cari ID Pinjam, Nama Peminjam, atau Judul Buku..." value="{{ request('search') }}">
                                 <button class="btn btn-primary" type="submit" title="Cari Data"><i class="bi bi-search"></i></button>
-                                @if(request('search'))
+                                @if (request('search'))
                                     <a href="{{ route('peminjaman.index') }}" class="btn btn-outline-secondary" title="Reset Pencarian"><i class="bi bi-arrow-clockwise"></i></a>
                                 @endif
                             </div>
@@ -344,7 +355,7 @@
                                             <td colspan="9" class="text-center py-5 text-muted">
                                                 <i class="bi bi-x-circle fs-3 d-block mb-2"></i>
                                                 Data tidak ditemukan.
-                                                @if(request('search'))
+                                                @if (request('search'))
                                                     <br><small>Tidak ada data yang cocok dengan pencarian "{{ request('search') }}". <a href="{{ route('peminjaman.index') }}">Tampilkan semua data</a>.</small>
                                                 @endif
                                             </td>

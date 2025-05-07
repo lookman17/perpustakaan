@@ -72,6 +72,15 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="col-md-6">
+                                    <label for="donatur_id" class="form-label">Donatur *</label>
+                                    <select name="donatur_id" id="donatur_id" class="form-select" required>
+                                        <option value="" disabled selected>-Pilih Donatur-</option>
+                                        @foreach($donatur as $p)
+                                            <option value="{{ $p->donatur_id }}">{{ $p->donatur_nama }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
             
                                 <div class="col-md-6">
                                     <label for="penerbit_id" class="form-label">Penerbit *</label>

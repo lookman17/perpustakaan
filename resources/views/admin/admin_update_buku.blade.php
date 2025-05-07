@@ -95,6 +95,10 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <label for="buku_stok" class="form-label">Stok Buku</label>
+                        <input type="number" name="buku_stok" id="buku_stok" class="form-control" value="{{ $buku->buku_stok }}" placeholder="Masukkan stok buku" required>
+                    </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6">

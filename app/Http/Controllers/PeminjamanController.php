@@ -136,7 +136,7 @@ class PeminjamanController extends Controller
     {
         $peminjamans = Peminjaman::with(['details', 'user'])
             ->orderBy('peminjaman_tglpinjam', 'desc')
-            ->paginate(10);
+            ->paginate(5);
 
         return view('admin.admin_peminjam', compact('peminjamans'));
     }

@@ -32,12 +32,34 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-                <a href="{{ route('create_buku') }}">
-                    <button class="btn btn-primary my-3">Tambah Buku</button>
-                </a>
-
-                <div class="table-responsive card bg-light">
-                    <table class="table table-bordered">
+                <form action="{{ route('buku') }}" method="GET" class="mb-3">
+                    <div class="row g-2">
+                        <div class="col-md-1">
+                            <a href="{{ route('create_buku') }}" class="btn btn-primary w-100"><i class="fas fa-plus"></i></a>
+                        </div>
+                        <div class="col-md-5">
+                            <input type="text" name="search" class="form-control" placeholder="Cari buku..." value="{{ request('search') }}">
+                        </div>
+                        <div class="col-md-5">
+                            <select name="kategori" class="form-select">
+                                <option value="">-- Semua Kategori --</option>
+                                @foreach($kategoris as $kategori)
+                                    <option value="{{ $kategori->kategori_id }}" {{ $selectedKategori == $kategori->kategori_id ? 'selected' : '' }}>
+                                        {{ $kategori->kategori_nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-1">
+                            <button class="btn btn-primary w-100" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+                
+                
+                <div class="table-responsive">
+                    <table class="table">
                         <thead class="table">
                             <tr>
                                 <th>No</th>
@@ -83,6 +105,7 @@
                                                     <p><strong>Kategori:</strong> {{ $buku->kategori->kategori_nama }}</p>
                                                     <p><strong>Rak:</strong> {{ $buku->rak->rak_lokasi }} ({{ $buku->rak->rak_nama }})</p>
                                                     <p><strong>ISBN:</strong> {{ $buku->buku_isbn }}</p>
+                                                    <p><strong>donatur</strong> {{ $buku->buku_donatur}}</p>
                                                     <p><strong>Stok:</strong> {{ $buku->buku_stok }}</p>
                                                 </div>
                                                 <div class="modal-footer">

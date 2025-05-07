@@ -63,21 +63,39 @@ public function bukuSiswa(){
 public function create_penerbit(){
     return view('admin.create_penerbit');
 }
-public function penerbit() {
-    $data = Penerbit::readPenerbit();
+public function penerbit(Request $request)
+{
+    $search = $request->input('search');
+    $penerbit = Penerbit::query();
 
-    return view('admin.penerbit', ['level' => 'admin'])->with('penerbit', $data);
+    if ($search) {
+        $penerbit = $penerbit->where('penerbit_nama', 'like', "%$search%")
+            ->orWhere('penerbit_alamat', 'like', "%$search%")
+            ->orWhere('penerbit_notelp', 'like', "%$search%")
+            ->orWhere('penerbit_email', 'like', "%$search%");
+    }
+
+    $penerbit = $penerbit->paginate(10);
+
+    return view('admin.penerbit', compact('penerbit'));
 }
+
 public function update_penerbit ($id) {
     $penerbit = Penerbit::readPenerbitById($id);
 
     return view('admin.update_penerbit', ['level' => 'admin'])->with('penerbit', $penerbit);
 }
 //kategoribuku
-public function kategoriBuku()
+public function KategoriBuku(Request $request)
 {
-    $kategoris = KategoriBuku::readKategori();
-    return view('admin.kategori_buku', compact('kategoris')); 
+    $search = $request->input('search');
+
+    $kategoris = KategoriBuku::when($search, function ($query, $search) {
+        return $query->where('kategori_nama', 'like', '%' . $search . '%');
+    })
+    ->paginate(10);
+
+    return view('admin.kategori_buku', compact('kategoris'));
 }
 
 // Menampilkan form create kategori
@@ -106,7 +124,7 @@ public function create_buku()
 
 public function update_buku($id)
 {
-    $buku = Buku::findOrFail($id); // Temukan buku berdasarkan ID
+    $buku = Buku::findOrFail($id);// Temukan buku berdasarkan ID
     return view('admin.admin_update_buku', compact('buku'));
 }
 

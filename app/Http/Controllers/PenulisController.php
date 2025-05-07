@@ -8,11 +8,20 @@ use App\Models\Penulis;
 class PenulisController extends Controller
 {
     // Method untuk menampilkan daftar penulis
-    public function index()
-    {
-        $penuliss = Penulis::paginate(4);
-        return view('admin.penulis', compact('penuliss')); // Sesuaikan dengan nama view Anda
-    }
+    public function index(Request $request)
+{
+    $search = $request->input('search'); // Mendapatkan nilai pencarian
+
+    // Menggunakan query builder dengan kondisi pencarian jika ada
+    $penuliss = Penulis::when($search, function ($query, $search) {
+        return $query->where('penulis_nama_id', 'like', '%' . $search . '%');
+    })
+    ->paginate(5) // Pagination 10 data per halaman
+    ->appends(['search' => $search]); // Menambahkan parameter search untuk pagination
+
+    return view('admin.penulis', compact('penuliss')); // Mengirimkan data penulis dan variabel pencarian ke view
+}
+
 
     // Method untuk menampilkan form tambah penulis
     public function create()

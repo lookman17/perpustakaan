@@ -53,9 +53,16 @@ class KategoriController extends Controller
     }
 
     // Method untuk menampilkan daftar kategori
-    public function index()
-    {
-        $kategoris = KategoriBuku::all();
-        return view('kategoriBuku', compact('kategoris'));
-    }
+ public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $kategoris = KategoriBuku::when($search, function ($query, $search) {
+        return $query->where('kategori_nama', 'like', '%' . $search . '%');
+    })
+    ->paginate(10);
+
+    return view('admin.kategori_buku', compact('kategoris'));
+}
+
 }

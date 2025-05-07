@@ -23,6 +23,10 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-pencil"></i></div>
                     Penulis
                 </a>
+                <a class="nav-link" href="{{ route('donatur') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-pencil"></i></div>
+                    Penulis
+                </a>
                 <a class="nav-link" href="{{ route('Penerbit') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-house"></i></div>
                     Penerbit

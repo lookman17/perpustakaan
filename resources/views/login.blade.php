@@ -72,9 +72,7 @@
                                                class="form-control @error('user_password') is-invalid @enderror"
                                                placeholder="Masukkan password Anda" required>
                                         {{-- Use Bootstrap Icons and standard button style --}}
-                                        <button type="button" id="toggle-password" class="btn btn-outline-secondary">
-                                            <i class="bi bi-eye-fill" id="eye-icon"></i>
-                                        </button>
+                                       
                                         {{-- Error message for password needs d-block with input-group --}}
                                         @error('user_password')
                                             <div class="invalid-feedback d-block">

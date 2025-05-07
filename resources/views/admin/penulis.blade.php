@@ -20,22 +20,35 @@
                     <li class="breadcrumb-item active" aria-current="page">Kelola</li>
                 </ol>
             </nav>
+        
             @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <strong>Berhasil!</strong> {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        @elseif (session('deleted'))
+            @elseif (session('deleted'))
             <div class="alert alert-info alert-dismissible fade show" role="alert">
                 <strong>Berhasil!</strong> {{ session('deleted') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        @endif
-            <a href="{{ route('create_penulis') }}" class="btn btn-primary mb-3">Create Penulis</a>
-
-            <div class="table-responsive card bg-light">
-                <table class="table table-bordered">
-                    <thead class="table ">
+            @endif
+        
+            <div class="row mb-3 align-items-center">
+                <div class="col-md-1"> <!-- Tambahkan margin bawah pada mobile -->
+                    <a href="{{ route('create_penulis') }}" class="btn btn-primary w-100"><i class="fas fa-plus"></i></a>
+                </div>
+                <div class="col-md-6">
+                    <form action="{{ route('Penulis') }}" method="GET">
+                        <div class="input-group w-100">
+                            <input type="text" name="search" class="form-control" placeholder="Cari Rak..." value="{{ request('search') }}">
+                            <button class="btn btn-primary" type="submit">Cari</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead class="table">
                         <tr>
                             <th>No</th>
                             <th>Nama Penulis</th>
@@ -56,47 +69,44 @@
                                     <a href="{{ route('edit_penulis', $p->penulis_id) }}" class="btn btn-warning">
                                         <i class="fas fa-pencil"></i>
                                     </a>
-                                
-                                    
-                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapusModal{{ $p->penulis_id }}">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapusModal{{ $p->penulis_id }}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
-                                
                             </td>
                         </tr>
+                        <!-- Modal -->
                         <div class="modal fade" id="hapusModal{{ $p->penulis_id }}" tabindex="-1" aria-labelledby="hapusModalLabel{{ $p->penulis_id }}" aria-hidden="true">
                             <div class="modal-dialog">
-                              <div class="modal-content">
-                                <form action="{{ route('delete_penulis', ['penulis_id' => $p->penulis_id]) }}" method="POST">
-                                  @csrf
-                                  @method('DELETE')
-                                  <div class="modal-header">
-                                    <h5 class="modal-title" id="hapusModalLabel{{ $p->penulis_id }}">Konfirmasi Hapus</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                                  </div>
-                                  <div class="modal-body">
-                                      <div class="text-center text-warning mb-3">
-                                          <i class="fas fa-exclamation-triangle fa-3x"></i>
-                                      </div>
-                                      Apakah Anda yakin ingin menghapus    <strong>{{ $p->penulis_nama_id }}</strong>?
-
-                                  
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                    <button type="submit" class="btn btn-danger">Hapus</button>
-                                  </div>
-                                </form>
-                              </div>
+                                <div class="modal-content">
+                                    <form action="{{ route('delete_penulis', ['penulis_id' => $p->penulis_id]) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="hapusModalLabel{{ $p->penulis_id }}">Konfirmasi Hapus</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="text-center text-warning mb-3">
+                                                <i class="fas fa-exclamation-triangle fa-3x"></i>
+                                            </div>
+                                            Apakah Anda yakin ingin menghapus <strong>{{ $p->penulis_nama_id }}</strong>?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-danger">Hapus</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                          </div>
+                        </div>
                         @endforeach
                     </tbody>
                 </table>
             </div>
             {{ $penuliss->links('vendor.pagination.bootstrap-5') }}
         </div>
+        
     </main>
     @include('template.footer')
 </div>

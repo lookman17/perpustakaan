@@ -57,10 +57,8 @@ public function register(Request $request)
         'password' => 'required|string|min:8',
     ]);
 
-    // Membuat ID user secara acak
     $id = mt_rand(1000000000000000, 9999999999999999);
 
-    // Menyimpan data user
     $data = [
         'user_id' => $id,
         'user_nama' => $request->input('nama'),

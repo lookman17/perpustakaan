@@ -21,7 +21,8 @@ return new class extends Migration
             $table->char('buku_isbn', 16)->nullable(false);
             $table->char('buku_thnterbit', 4)->nullable(false);
             $table->string('buku_gambar')->nullable('true');
-            $table->integer('buku_stok')->default(0)->nullable(false); // Kolom stok ditambahkan di sini
+            $table->integer('buku_stok')->default(0)->nullable(false);
+            $table->string('buku_donatur_id', 16)->nullable('true');
 
             // Create Foreign Key
             $table->foreign('buku_penulis_id')->references('penulis_id')->on('penulis')
@@ -34,6 +35,9 @@ return new class extends Migration
                 ->onDelete('cascade')->onUpdate('cascade');
 
             $table->foreign('buku_rak_id')->references('rak_id')->on('rak')
+                ->onDelete('cascade')->onUpdate('cascade');
+                
+            $table->foreign('buku_donatur_id')->references('donatur_id')->on('donatur')
                 ->onDelete('cascade')->onUpdate('cascade');
         });
     }

@@ -23,12 +23,13 @@ class Buku extends Model
         'buku_isbn',
         'buku_thnterbit',
         'buku_gambar',
-        'buku_stok'
+        'buku_stok',
+        'buku_donatur_id'
     ];
     
     public function index()
     {
-        $bukus = Buku::with(['penulis', 'penerbit', 'kategori', 'rak']) // Mengambil data dengan relasi
+        $bukus = Buku::with(['penulis', 'penerbit', 'kategori', 'rak','donatur']) // Mengambil data dengan relasi
                      ->paginate(10); // Menampilkan 10 data per halaman
 
         return view('admin.admin_buku', ['level' => 'admin', 'bukus' => $bukus]);
@@ -51,6 +52,10 @@ class Buku extends Model
     public function rak()
     {
         return $this->belongsTo(Rak::class, 'buku_rak_id');
+    }
+    public function donatur()
+    {
+        return $this->belongsTo(Donatur::class, 'buku_donatur_id');
     }
 }
 

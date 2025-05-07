@@ -8,11 +8,20 @@ use Illuminate\Http\Request;
 class RakController extends Controller
 {
     // Show all Rak records
-    public function index()
-    {
-        $raks = Rak::Paginate(4);
-        return view('admin.rak', compact('raks'));
-    }
+    public function index(Request $request)
+{
+    $search = $request->input('search');
+    
+    $raks = Rak::query()
+        ->when($search, function ($query, $search) {
+            return $query->where('rak_nama', 'like', "%{$search}%")
+                         ->orWhere('rak_lokasi', 'like', "%{$search}%");
+        })
+        ->paginate(10);
+    
+    return view('admin.rak', compact('raks'));
+}
+
 
     // Show form for creating a new Rak
     public function create()

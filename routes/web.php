@@ -7,10 +7,12 @@ use App\Http\Controllers\{
     PenerbitController,
     KategoriController,
     BukuController,
+    DonaturController,
     PenulisController,
     PeminjamanController,
     RakController
 };
+use App\Models\Donatur;
 
 // Rute untuk Halaman Login dan Registrasi (tidak memerlukan autentikasi)
 Route::get('/', function () {
@@ -51,6 +53,17 @@ Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
         Route::patch('/{kategori_id}', [KategoriController::class, 'update'])->name('kategori.update');
         Route::delete('/{kategori_id}', [KategoriController::class, 'delete'])->name('kategori.delete');
     });
+
+    //donatur
+    Route::prefix('donatur')->group(function () {
+        Route::get('/donatur', [DonaturController::class, 'index'])->name('donatur');
+        Route::get('/create', [DonaturController::class, 'tambah'])->name('create_donatur');
+        Route::post('/', [DonaturController::class, 'create'])->name('action.createdonatur');
+        Route::get('/update/{donatur_id}', [DonaturController::class, 'updatedonatur'])->name('update_donatur');
+        Route::patch('/{donatur_id}', [DonaturController::class, 'update'])->name('donatur.update');
+        Route::delete('/{donatur_id}', [DonaturController::class, 'delete'])->name('donatur.delete');
+    });
+    
 
     // Modul Buku
     Route::prefix('buku')->group(function () {

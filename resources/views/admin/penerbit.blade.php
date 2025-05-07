@@ -32,14 +32,24 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-                <a href="{{ route('create_penerbit') }}">
-                    <button class="btn btn-primary my-3">Tambah Penerbit</button>
-                </a>
-
-                <div class="table-responsive card bg-light">
-                    <div class="table-responsive card bg-light">
-                        <table class="table table-bordered">
-                            <thead class="table ">
+                
+                <div class="row mb-3 align-items-center">
+                    <div class="col-md-1">
+                        <a href="{{ route('create_penerbit') }}" class="btn btn-primary w-100"><i class="fas fa-plus"></i></a>
+                    </div>
+                    <div class="col-md-6">
+                        <form action="{{ route('Penerbit') }}" method="GET">
+                            <div class="input-group w-100">
+                                <input type="text" name="search" class="form-control" placeholder="Cari Rak..." value="{{ request('search') }}">
+                                <button class="btn btn-primary" type="submit">Cari</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table">
                                 <tr>
                                     <th scope="row">No</th>
                                     <th scope="row">Nama Penerbit</th>

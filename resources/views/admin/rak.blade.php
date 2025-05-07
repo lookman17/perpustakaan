@@ -34,10 +34,21 @@
                 </div>
                 @endif
 
-                <a href="{{ route('rak.create') }}" class="btn btn-primary mb-3">Tambah Rak</a>
-
-                <div class="table-responsive card bg-light">
-                    <table class="table table-bordered">
+                <div class="row mb-3 align-items-center">
+                    <div class="col-md-1"> <!-- Tambahkan margin bawah pada mobile -->
+                        <a href="{{ route('rak.create') }}" class="btn btn-primary w-100"><i class="fas fa-plus"></i></a>
+                    </div>
+                    <div class="col-md-6">
+                        <form action="{{ route('kategoriBuku') }}" method="GET">
+                            <div class="input-group w-100">
+                                <input type="text" name="search" class="form-control" placeholder="Cari Rak..." value="{{ request('search') }}">
+                                <button class="btn btn-primary" type="submit">Cari</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
                         <thead class="table ">
                             <tr>
                                 <th>No</th>

@@ -60,11 +60,22 @@ class PenerbitController extends Controller
 }
 
     // Method untuk menampilkan daftar penerbit
-    public function index()
-{
-    // Menggunakan paginate untuk pagination
-    $penerbit = Penerbit::paginate(4);
-    return view('admin.penerbit', compact('penerbit'));
-}
+    public function index(Request $request)
+    {
+        $search = $request->input('search');
+        $penerbit = Penerbit::query();
+    
+        if ($search) {
+            $penerbit = $penerbit->where('penerbit_nama', 'like', "%$search%")
+                ->orWhere('penerbit_alamat', 'like', "%$search%")
+                ->orWhere('penerbit_notelp', 'like', "%$search%")
+                ->orWhere('penerbit_email', 'like', "%$search%");
+        }
+    
+        $penerbit = $penerbit->paginate(10);
+    
+        return view('admin.penerbit', compact('penerbit'));
+    }
+    
 
 }
